@@ -1,0 +1,235 @@
+**********************************docker-installation-steps**********************************
+
+
+
+
+
+
+
+***********************************DOCKER-HUB***********************************
+# Docker Hub is a service provided by Docker for finding and sharing
+# container images with your team. Learn more and find images
+# at https://hub.docker.com
+
+
+# Login into Docker
+docker login -u <username>
+
+# Publish an image to Docker Hub
+docker push <username>/<image_name>
+
+# Search Hub for an image
+docker search <image_name>
+
+# Pull an image from a Docker Hub
+docker pull <image_name>
+
+# Get help with Docker. Can also use –help on all subcommands
+docker --help
+
+# Display system-wide information
+docker info
+
+
+
+
+
+
+***************************************Basic-commands*************************************
+
+
+#List running containers
+docker ps  
+
+# List all docker containers (running and stopped):
+docker ps --all
+
+#Build an Image from a Dockerfile
+docker build -t <image_name>
+
+# Build an Image from a Dockerfile without the cache
+docker build -t <image_name> . –no-cache
+
+# Build an image from Dockerfile in current directory
+docker build --tag myimage . 
+
+# List local images
+docker images
+
+# Start or stop an existing container
+docker start|stop <container_name> (or <container-id>)
+
+# Delete an Image
+docker rmi <image_name>
+
+#Restart a container
+docker restart <container name>
+
+# Remove a stopped container
+docker rm <container_name>
+
+# kill he container 
+docker kill <container_name>
+
+# Destroy the container
+docker rm -f <container_name>
+
+# suspend container
+docker pause
+
+# resume container
+docker resume
+
+# Remove all unused images
+docker image prune
+docker rmi $(docker images \ -q -f "dangling=true")
+
+# Run a container in the background
+docker run -d <image_name>
+
+# Open a shell inside a running container
+docker exec -it <container_name> sh
+
+# Run a container with and publish a container’s port(s) to the host.
+docker run -p <host_port>:<container_port> -d <image_name> 
+docker run -p <host_port>:<container_port> <image_name>
+
+# Create and run a container from an image, with a custom name:
+docker run --name <container_name> <image_name>
+
+# Start the docker daemon
+docker -d 
+
+# The docker history command is used to view the history of an image, showing the layers and commands used to build
+#  --no-trunc: Don’t truncate the output.
+# -q, --quiet: Only show image IDs.
+docker history <image_name> 
+
+
+# The docker save command is used to export one or more Docker images to a tar archive. This is useful for saving and sharing images without needing to re-pull them from a remote registry.
+
+# Save an Image to a Tar File
+docker save -o my_redis_image.tar redis
+
+# Save Multiple Images to a Tar File
+docker save -o my_images.tar redis alpine nginx
+
+# Save an Image and Pipe to Gzip for Compression
+docker save redis | gzip > redis_image.tar.gz
+
+
+
+
+
+
+
+**************************************inspect-container*************************************
+
+
+
+# Fetch and follow the logs of a container ,live logs
+docker logs -f <container_name>
+
+# Show exposed ports of a container
+docker port <container_id> 
+
+# To inspect a running container
+docker inspect <container_name> (or <container_id>)
+
+# View resource usage stats
+docker container stats
+
+#Check docker daemon disk space usage
+docker system df
+
+#Remove images, networks, containers, and volumes
+docker system prune -af
+
+# show the diffrences with the images (modified files)
+docker diff <container_name>
+
+# list the process runnnig on the container 
+docker top <container_name>
+
+
+
+
+
+
+**************************************volumnes*************************************
+
+
+# Create a local volume
+docker volume create --name <volume_name>
+
+#  Mounting a volume on container start
+docker run -v <volume_name>:/data <image-name>
+
+# Destroy a volume
+docker volume rm <volume_name>
+
+# List volumes
+docker volume ls
+
+
+
+
+
+
+
+**************************************copy-commands*************************************
+
+
+# Copy from Host to Container
+docker cp <source-path-on-host> <container-name-or-id>:<destination-path-in-container>
+exe=docker cp /path/on/host/file.txt my_container:/path/in/container/
+
+# Copy from Container to Host
+docker cp <container-name-or-id>:<source-path-in-container> <destination-path-on-host>
+exe=docker cp my_container:/path/in/container/file.txt /path/on/host/
+
+# Copy a Directory from Host to Container
+docker cp /path/on/host/my_directory my_container:/path/in/container/
+
+# Copy a Directory from Container to Host
+docker cp my_container:/path/in/container/my_directory /path/on/host/
+
+
+
+
+
+
+
+**************************************export-commands*************************************
+
+
+# The docker export command is used to export the filesystem of a container as a tarball (archive) without the image layers or history. It creates a snapshot of the container's filesystem at the current state.
+
+# This command exports the filesystem of a running or stopped container into a .tar file
+docker export -o container_backup.tar my_container
+
+# if you want to export the filesystem and view it directly or pipe it to another command
+docker export my_container > container_backup.tar
+
+
+
+
+
+
+**************************************network*************************************
+
+
+# Create a local network
+docker network create <network_name>
+
+# Attach a container to a network on start
+docker run -d --net <network_name> <image-name>
+
+# Connect a running container from a network
+docker network connect <network_name> <container_id>
+
+# Disconnect container to a network
+docker network disconnect <network_name> <container_id>
+
+# Query a specific metadata of a running container
+docker inspect -f '{{ .NetworkSettings.IPAddress }}' <container_id>
