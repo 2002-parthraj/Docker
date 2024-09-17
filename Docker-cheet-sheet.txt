@@ -1,6 +1,6 @@
-**********************************docker-installation-steps**********************************
+**********************************docker-installation-  steps**********************************
 
-
+https://docs.docker.com/engine/install/
 
 
 
@@ -29,6 +29,14 @@ docker --help
 
 # Display system-wide information
 docker info
+
+
+
+*************************************How to make Dockerfile*************************************
+
+
+
+
 
 
 
@@ -101,8 +109,8 @@ docker run --name <container_name> <image_name>
 docker -d 
 
 # The docker history command is used to view the history of an image, showing the layers and commands used to build
-#  --no-trunc: Don’t truncate the output.
-# -q, --quiet: Only show image IDs.
+(--no-trunc: Don’t truncate the output.)
+(-q, --quiet: Only show image IDs.)
 docker history <image_name> 
 
 
@@ -158,18 +166,31 @@ docker top <container_name>
 
 **************************************volumnes*************************************
 
+# List volumes
+docker volume ls
 
 # Create a local volume
 docker volume create --name <volume_name>
 
+#  Inspect a Volume (This shows detailed information about the volume, including the mount point, driver, and any containers using it)
+docker volume inspect my_volume
+
 #  Mounting a volume on container start
 docker run -v <volume_name>:/data <image-name>
+
+# Use a Volume When Running a Container (This runs an nginx container with the volume my_volume mounted at the /data directory inside the container.)
+docker run -d --name my_container -v my_volume:/data nginx
+
+# Mount a Volume at a Specific Path
+docker run -d --name my_container -v /my/local/path:/data nginx
 
 # Destroy a volume
 docker volume rm <volume_name>
 
-# List volumes
-docker volume ls
+# Run a Container with Multiple Volumes (This runs a container with two volumes my_volume mounted at /data ;;Host directory 
+# /my/local/path mounted at /config)
+docker run -d --name my_container -v my_volume:/data -v /my/local/path:/config nginx
+
 
 
 
@@ -218,6 +239,8 @@ docker export my_container > container_backup.tar
 
 **************************************network*************************************
 
+# List All Docker Networks
+docker network ls
 
 # Create a local network
 docker network create <network_name>
@@ -233,3 +256,14 @@ docker network disconnect <network_name> <container_id>
 
 # Query a specific metadata of a running container
 docker inspect -f '{{ .NetworkSettings.IPAddress }}' <container_id>
+
+# Disconnect a Container from a Network
+docker network inspect my_network
+
+# Remove a Network
+docker network rm my_network
+
+
+
+
+
