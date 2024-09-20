@@ -1,4 +1,19 @@
-**********************************docker-installation-  steps**********************************
+****Index****
+
+docker-installation
+DOCKER-HUB
+Basic-commands
+inspect-container
+volumnes
+copy-commands
+export-commands
+network
+Multi-option Docker Run Command
+How to make Dockerfile
+Dockerfile Example
+
+
+**********************************docker-installation**********************************
 
 https://docs.docker.com/engine/install/
 
@@ -246,11 +261,28 @@ docker network create <network_name>
 * * Attach a container to a network on start
 docker run -d --net <network_name> <image-name>
 
+* * Create a Container and Attach it to a Specific Network
+docker run -d --name my-app --network my-network nginx
+
 * * Connect a running container from a network
 docker network connect <network_name> <container_id>
 
+* * Attach Multiple Networks to a Container
+docker network connect my-network1 my-container
+docker network connect my-network2 my-container
+
+* *Run a Container with a Static IP
+"This command creates a network with a specific subnet (my-static-network) and runs a container with a static IP address (172.18.0.10) on that network."
+
+docker network create --subnet=172.18.0.0/16 my-static-network
+docker run -d --name my-app --network my-static-network --ip 172.18.0.10 nginx
+
+
 * * Disconnect container to a network
 docker network disconnect <network_name> <container_id>
+
+* * Disconnect All Containers from a Network
+docker network disconnect -f my-network $(docker ps -q)
 
 * * Query a specific metadata of a running container
 docker inspect -f '{{ .NetworkSettings.IPAddress }}' <container_id>
@@ -264,11 +296,55 @@ docker network rm my_network
 
 
 
+**************Example: Multi-option Docker Run Command*************
+docker run \
+  --name my-container \
+  --network my-network \
+  -d \
+  -p 8080:80 \
+  -e MYSQL_ROOT_PASSWORD=rootpassword \
+  -e MYSQL_DATABASE=mydb \
+  -v /my/local/data:/var/lib/mysql \
+  --restart always \
+  mysql:5.7
+
+
+* * Explanation:
+
+docker run \ — Starts the Docker run command.
+
+--name my-container \ — Sets the container name to my-container.
+
+--network my-network \ — Connects the container to the my-network network.
+
+-d \ — Runs the container in detached mode (in the background).
+
+-p 8080:80 \ — Maps port 8080 on the host to port 80 on the container.
+
+-e MYSQL_ROOT_PASSWORD=rootpassword \ — Sets the environment variable MYSQL_ROOT_PASSWORD with the value rootpassword.
+
+-e MYSQL_DATABASE=mydb \ — Sets another environment variable MYSQL_DATABASE with the value mydb.
+
+-v /my/local/data:/var/lib/mysql \ — Mounts a volume from the host (/my/local/data) to the container (/var/lib/mysql).
+
+--restart always \ — Configures the container to always restart if it stops.
+
+mysql:5.7 — Specifies the Docker image and version to run (mysql:5.7).
+
+
+
+
+
+
+
+
+
+
 
 
 *************************************How to make Dockerfile*************************************
 A Dockerfile is a text document that contains a series of instructions on how to build a Docker image. Docker reads the Dockerfile to create an image with the environment and configuration you need for your applications.
-Example Dockerfile
+
 
 FROM image                  "base image for the build"
     FROM ubuntu:20.04
@@ -299,6 +375,9 @@ EXPOSE xxxx xxxx            Informs Docker that the container will listen on the
 
 VOLUME  mp                    Declares a mount point, so Docker can store data in a volume
     VOLUME ["/data"]
+
+
+
 
 
 
@@ -478,6 +557,8 @@ COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+
+
 
 
 
