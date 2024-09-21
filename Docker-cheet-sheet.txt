@@ -1,7 +1,7 @@
 ****Index****
 
 docker-installation
-DOCKER-HUB
+DOCKER-hub
 Basic-commands
 inspect-container
 volumnes
@@ -179,10 +179,10 @@ docker top <container_name>
 **************************************volumnes*************************************
 
 * * List volumes
-$docker volume ls
+docker volume ls
 
 * * Create a local volume
-$docker volume create --name <volume_name>
+docker volume create --name <volume_name>
 
 * *  Inspect a Volume (This shows detailed information about the volume, including the mount point, driver, and any containers using it)
 docker volume inspect my_volume
