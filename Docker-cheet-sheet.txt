@@ -1,11 +1,11 @@
 ****Index****
 
 Docker Explanation
-docker-installation
-DOCKER-hub
+Docker-installation
+Docker-hub
 Basic-commands
 inspect-container
-volumnes
+volumes
 copy-commands
 export-commands
 network
@@ -70,7 +70,7 @@ https://docs.docker.com/engine/install/
 
 
 
-***********************************DOCKER-HUB***********************************
+***********************************Docker-HUB***********************************
 * * Docker Hub is a service provided by Docker for finding and sharing
 * * container images with your team. Learn more and find images
 * * at https://hub.docker.com
@@ -225,7 +225,7 @@ docker top <container_name>
 
 
 
-**************************************volumnes*************************************
+**************************************volumes*************************************
 
 * * List volumes
 docker volume ls
