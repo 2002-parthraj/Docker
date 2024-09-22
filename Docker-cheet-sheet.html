@@ -556,153 +556,141 @@
     
     <h1 id="dockerfile-example">Dockerfile-examples</h1>
     <h2>1. Dockerfile for a Node.js Application</h2>
-    <pre><code>FROM node:14
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-ENV NODE_ENV=production
-EXPOSE 3000
-CMD ["npm", "start"]
+    <pre><code> FROM node:14
+ WORKDIR /app
+ COPY package*.json ./
+ RUN npm install
+ COPY . .
+ ENV NODE_ENV=production
+ EXPOSE 3000
+ CMD ["npm", "start"]
     </code></pre>
 
     <h2>2. Dockerfile for a Python Flask Application</h2>
-    <pre><code>FROM python:3.9-slim
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-EXPOSE 5000
-CMD ["python", "app.py"]
+    <pre><code> FROM python:3.9-slim
+ ENV PYTHONDONTWRITEBYTECODE=1
+ ENV PYTHONUNBUFFERED=1
+ WORKDIR /app
+ COPY requirements.txt ./
+ RUN pip install --no-cache-dir -r requirements.txt
+ COPY . .
+ EXPOSE 5000
+ CMD ["python", "app.py"]
     </code></pre>
 
     <h2>3. Dockerfile for a Java Spring Boot Application</h2>
-    <pre><code>FROM openjdk:11-jdk-slim
-WORKDIR /app
-COPY target/myapp-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+    <pre><code> FROM openjdk:11-jdk-slim
+ WORKDIR /app
+ COPY target/myapp-0.0.1-SNAPSHOT.jar app.jar
+ EXPOSE 8080
+ ENTRYPOINT ["java", "-jar", "app.jar"]
     </code></pre>
 
     <h2>4. Dockerfile for an Nginx-based Static Website</h2>
-    <pre><code>FROM nginx:alpine
-COPY ./public /usr/share/nginx/html
-EXPOSE 80
+    <pre><code> FROM nginx:alpine
+ COPY ./public /usr/share/nginx/html
+ EXPOSE 80
     </code></pre>
 
     <h2>5. Dockerfile for a .NET Core Application</h2>
-    <pre><code>FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /app
-COPY *.csproj ./
-RUN dotnet restore
-COPY . ./
-RUN dotnet publish -c Release -o out
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
-WORKDIR /app
-COPY --from=build /app/out ./
-EXPOSE 80
-ENTRYPOINT ["dotnet", "MyApp.dll"]
+    <pre><code> FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ WORKDIR /app
+ COPY *.csproj ./
+ RUN dotnet restore
+ COPY . ./
+ RUN dotnet publish -c Release -o out
+ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+ WORKDIR /app
+ COPY --from=build /app/out ./
+ EXPOSE 80
+ ENTRYPOINT ["dotnet", "MyApp.dll"]
     </code></pre>
 
     <h2>6. Dockerfile for a PHP and Apache Application</h2>
-    <pre><code>FROM php:7.4-apache
-COPY ./src /var/www/html/
-RUN chown -R www-data:www-data /var/www/html
-RUN a2enmod rewrite
-EXPOSE 80
-CMD ["apache2-foreground"]
+    <pre><code> FROM php:7.4-apache
+ COPY ./src /var/www/html/
+ RUN chown -R www-data:www-data /var/www/html
+ RUN a2enmod rewrite
+ EXPOSE 80
+ CMD ["apache2-foreground"]
     </code></pre>
 
     <h2>7. Dockerfile for a Ruby on Rails Application</h2>
-    <pre><code>FROM ruby:2.7
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
-WORKDIR /app
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
-COPY . .
-EXPOSE 3000
-CMD ["rails", "server", "-b", "0.0.0.0"]
+    <pre><code> FROM ruby:2.7
+ RUN apt-get update -qq && \
+ apt-get install -y nodejs postgresql-client  
+ WORKDIR /app   
+ COPY Gemfile Gemfile.lock ./
+ RUN bundle install   
+ COPY . .
+ EXPOSE 3000
+ CMD ["rails", "server", "-b", "0.0.0.0"]
+    
     </code></pre>
 
     <h2>8. Dockerfile for a React.js Frontend Application</h2>
-    <pre><code>FROM node:16 AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+    <pre><code> FROM node:16 AS build
+ WORKDIR /app
+ COPY package*.json ./
+ RUN npm install
+ COPY . .
+ RUN npm run build
+ FROM nginx:alpine
+ COPY --from=build /app/build /usr/share/nginx/html
+ EXPOSE 80
+ CMD ["nginx", "-g", "daemon off;"]
     </code></pre>
 
     <h1>Advanced Examples of Dockerfile</h1>
 
     <h2>1. Dockerfile for Production-Ready Node.js Application</h2>
-    <pre><code>FROM node:16 AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --production
-COPY . .
-RUN npm run build
-
-FROM node:16-alpine
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
-WORKDIR /app
-COPY --from=builder /app/build /app
-EXPOSE 3000
-ENV NODE_ENV=production
-CMD ["npm", "start"]
+    <pre><code> FROM node:16 AS builder
+ WORKDIR /app
+ COPY package*.json ./
+ RUN npm install --production        
+ COPY . .
+ RUN npm run build        
+ FROM node:16-alpine       
+ RUN addgroup -S appgroup && \
+     adduser -S appuser -G appgroup       
+ USER appuser        
+ WORKDIR /app
+ COPY --from=builder /app/build /app       
+ EXPOSE 3000
+ ENV NODE_ENV=production        
+ CMD ["npm", "start"]
     </code></pre>
 
-    <h2>2. Dockerfile for a Microservice (Python Flask + Gunicorn)</h2>
-    <pre><code>FROM python:3.9-slim AS base
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-RUN apt-get update && apt-get install -y build-essential libpq-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
-WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+    
+    <h2>2. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build</h2>
+    <pre><code> FROM maven:3.8.4-openjdk-11 AS build
+ WORKDIR /app
+ COPY pom.xml .
+ RUN mvn dependency:go-offline
+ COPY src ./src
+ RUN mvn package -DskipTests
 
-FROM base AS final
-COPY . .
-EXPOSE 5000
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+ FROM openjdk:11-jre-slim
+ WORKDIR /app
+ COPY --from=build /app/target/myapp.jar ./myapp.jar
+ EXPOSE 8080
+ CMD ["java", "-jar", "myapp.jar"]
     </code></pre>
 
-    <h2>3. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build</h2>
-    <pre><code>FROM maven:3.8.4-openjdk-11 AS build
-WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:go-offline
-COPY src ./src
-RUN mvn package -DskipTests
+    <h2>3. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)</h2>
+    <pre><code> FROM node:16-alpine AS builder
+ WORKDIR /app
+ COPY package*.json ./
+ RUN npm install --production
+ COPY . .
+ RUN npm run build
 
-FROM openjdk:11-jre-slim
-WORKDIR /app
-COPY --from=build /app/target/myapp.jar ./myapp.jar
-EXPOSE 8080
-CMD ["java", "-jar", "myapp.jar"]
-    </code></pre>
-
-    <h2>4. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)</h2>
-    <pre><code>FROM node:16-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --production
-COPY . .
-RUN npm run build
-
-FROM docker:20.10.7-dind
-RUN apk add --no-cache nodejs npm
-WORKDIR /app
-COPY --from=builder /app /app
-EXPOSE 2375
-CMD ["dockerd-entrypoint.sh"]
+ FROM docker:20.10.7-dind
+ RUN apk add --no-cache nodejs npm
+ WORKDIR /app
+ COPY --from=builder /app /app
+ EXPOSE 2375
+ CMD ["dockerd-entrypoint.sh"]
     </code></pre>
 
     <h2><a href="#index">Back to Index</a><h2>
