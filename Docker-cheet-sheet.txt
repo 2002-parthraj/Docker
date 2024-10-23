@@ -117,7 +117,8 @@ docker build -t <image_name>
 docker build -t <image_name> . –no-cache
 
 * * Build an image from Dockerfile in current directory
-docker build --tag myimage . 
+docker build --tag myimage:01 . 
+docker build --tag myimage:02 . 
 
 * * List local images
 docker images
@@ -144,7 +145,7 @@ docker rm -f <container_name>
 docker pause
 
 * * resume container
-docker resume
+docker unpause
 
 * * Remove all unused images
 docker image prune
