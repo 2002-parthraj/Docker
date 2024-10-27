@@ -1,0 +1,14 @@
+Docker 
+
+what is docker 
+docker vs vm 
+docker installation 
+basic docker commands 
+deploying with containers 
+                👉docker compose 
+docker file 
+                👉private docker repository 
+docker volumes
+                website example
+                MongoDB database example
+
