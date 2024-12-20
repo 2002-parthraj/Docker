@@ -1,4 +1,4 @@
-### 1. What is Docker?
+###  What is Docker?
 
 Containerization Platform: Docker is a platform that allows developers to package applications and their dependencies into isolated environments called containers...
 
@@ -6,7 +6,8 @@ Lightweight Virtualization: Docker containers are much lighter than traditional 
 
 Portable Application Packaging: Docker allows developers to bundle their application, along with all necessary libraries...
 
-### 2. Why We Use Docker?
+<br/><br/>
+### Why We Use Docker?
 
 Portability: Docker containers package the application with all its dependencies, libraries, and environment settings...
 
@@ -21,140 +22,145 @@ Scalability: Docker integrates well with container orchestration tools like Kube
 Consistency: Docker eliminates the "works on my machine" problem by bundling the app and its dependencies into a single image. This ensures that the application behaves the same across all environments (development, testing, and production).
 
 
-follow the official Docker document
-
+<br/><br/>
+### Docker installation
 `https://docs.docker.com/engine/install/`
 
+#### follow the official Docker document
 
 
+<br/><br/>
+### Basic commands 
 `docker login -u [username]`
 
-Login into Docker
+Login into Docker<br/><br/>
 
 `docker push [username]/[image_name]`
 
-Publish an image to Docker Hub
+Publish an image to Docker Hub<br/><br/>
 
 `docker search [image_name]`
 
-Search Hub for an image
+Search Hub for an image<br/><br/>
 
 `docker pull [image_name]`
 
-Pull an image from a Docker Hub
+Pull an image from a Docker Hub<br/><br/>
 
 `docker --help`
 
-Get help with Docker. Can also use –help on all subcommands
+Get help with Docker. Can also use –help on all subcommands<br/><br/>
 
 `docker info`
 
-Display system-wide information
+Display system-wide information<br/><br/>
 
 `docker ps`
 
-List running containers
+List running containers<br/><br/>
 
 `docker ps --all`
 
-List all docker containers (running and stopped)
+List all docker containers (running and stopped)<br/><br/>
 
 `docker build -t [image_name]`
 
-Build an Image from a Dockerfile
+Build an Image from a Dockerfile<br/><br/>
 
 `docker build -t <image_name> . --no-cache`
 
-Build an image from a Dockerfile without the cache
+Build an image from a Dockerfile without the cache<br/><br/>
 
 `docker build --tag myimage:01 .`
 
-Build an image from Dockerfile in the current directory (first tag)
+Build an image from Dockerfile in the current directory (first tag)<br/><br/>
 
 `docker images`
 
-List local images
+List local images<br/><br/>
 
 `docker start|stop [container_name] or [container-id]`
 
-Start or stop an existing container
+Start or stop an existing container<br/><br/>
 
 `docker rmi [image_name]`
 
-Delete an Image
+Delete an Image<br/><br/>
 
 `docker restart [container_name]`
 
-Restart a container
+Restart a container<br/><br/>
 
 `docker rm <container_name>`
 
-Remove a stopped container
+Remove a stopped container<br/><br/>
 
 `docker kill <container_name>`
 
-Kill the container
+Kill the container<br/><br/>
 
 `docker rm -f <container_name>`
 
-Destroy the container
+Destroy the container<br/><br/>
 
 `docker pause <container_name>`
 
-Suspend a container
+Suspend a container<br/><br/>
 
 `docker unpause <container_name>`
 
-Resume a container
+Resume a container<br/><br/>
 
 `docker image prune`
 
-Remove all unused images
+Remove all unused images<br/><br/>
 
 `docker rmi $(docker images -q -f "dangling=true")`
 
-Remove dangling images
+Remove dangling images<br/><br/>
 
 `docker run -d <image_name>`
 
-Run a container in the background
+Run a container in the background<br/><br/>
 
 `docker exec -it <container_name> sh`
 
-Open a shell inside a running container
+Open a shell inside a running container<br/><br/>
 
 `docker run -it ubuntu bash`
 
-Run a container from the Ubuntu image and open a bash shell inside it
+Run a container from the Ubuntu image and open a bash shell inside it<br/><br/>
 
 `docker run -p <host_port>:<container_port> -d <image_name>`
 
-Run a container and publish a container’s port(s) to the host
+Run a container and publish a container’s port(s) to the host<br/><br/>
 
 `docker run --name <container_name> <image_name>`
 
-Create and run a container from an image with a custom name
+Create and run a container from an image with a custom name<br/><br/>
 
 `docker -d`
 
-Start the Docker daemon
+Start the Docker daemon<br/><br/>
 
 `docker history <image_name>`
 
-View the history of an image, showing layers and commands used to build it
+View the history of an image, showing layers and commands used to build it<br/><br/>
 
-`docker save -o my_redis_image.tar redis`
+`docker save -o my_redis_image.tar redis`<br/><br/>
 
-Save an image to a tar file
+Save an image to a tar file<br/><br/>
 
 `docker load -i my_redis_image.tar`
 
-Load an image from a tar file
+Load an image from a tar file<br/><br/>
 
 `docker network ls`
 
-List all Docker networks
+List all Docker networks<br/><br/>
 
+
+<br/><br/>
 #### Docker Multiple line command
 
 `docker run \`
@@ -177,169 +183,170 @@ List all Docker networks
 
 `mysql:5.7`
 
+<br/><br/>
 #### Explanation below here
 
 `docker run \`
 
-— Starts the Docker run command.
+Starts the Docker run command.<br/><br/>
 
 `--name my-container \`
 
-— Sets the container name to my-container.
+Sets the container name to my-container.<br/><br/>
 
 `--network my-network \`
 
-— Connects the container to the my-network network.
+Connects the container to the my-network network.<br/><br/>
 
 `-d \`
 
-— Runs the container in detached mode (in the background).
+Runs the container in detached mode (in the background).<br/><br/>
 
 `-p 8080:80 \`
 
-— Maps port 8080 on the host to port 80 on the container.
+Maps port 8080 on the host to port 80 on the container.<br/><br/>
 
 `-e MYSQL_ROOT_PASSWORD=rootpassword \`
 
-— Sets the environment variable MYSQL_ROOT_PASSWORD with the value rootpassword.
+Sets the environment variable MYSQL_ROOT_PASSWORD with the value rootpassword.<br/><br/>
 
 `-e MYSQL_DATABASE=mydb \`
 
-— Sets another environment variable MYSQL_DATABASE with the value mydb.
+Sets another environment variable MYSQL_DATABASE with the value mydb.<br/><br/>
 
 `-v /my/local/data:/var/lib/mysql \`
 
-— Mounts a volume from the host (/my/local/data) to the container (/var/lib/mysql).
+Mounts a volume from the host (/my/local/data) to the container (/var/lib/mysql).<br/><br/>
 
 `--restart always \`
 
-— Configures the container to always restart if it stops.
+ Configures the container to always restart if it stops.<br/><br/>
 
 `mysql:5.7`
 
-— Specifies the Docker image and version to run (mysql:5.7).
+Specifies the Docker image and version to run (mysql:5.7).<br/><br/>
 
 `docker logs -f <container_name>`
 
-Fetch and follow the logs of a container (live logs)
+Fetch and follow the logs of a container (live logs)<br/><br/>
 
 `docker port <container_id>`
 
-Show exposed ports of a container
+Show exposed ports of a container<br/><br/>
 
 `docker inspect <container_name>`
 
-Inspect a running container
+Inspect a running container<br/><br/>
 
 `docker container stats`
 
-View resource usage stats
+View resource usage stats<br/><br/>
 
 `docker system df`
 
-Check Docker daemon disk space usage
+Check Docker daemon disk space usage<br/><br/>
 
 `docker system prune -af`
 
-Remove images, networks, containers, and volumes
+Remove images, networks, containers, and volumes<br/><br/>
 
 `docker diff <container_name>`
 
-Show differences with the images (modified files)
+Show differences with the images (modified files)<br/><br/>
 
 `docker top <container_name>`
 
-List the processes running on the container
+List the processes running on the container<br/><br/>
 
 `docker volume ls`
 
-List volumes
+List volumes<br/><br/>
 
 `docker volume create --name <volume_name>`
 
-Create a local volume
+Create a local volume<br/><br/>
 
 `docker volume inspect my_volume`
 
-Inspect a volume for detailed information
+Inspect a volume for detailed information<br/><br/>
 
 `docker run -v <volume_name>:/data <image-name>`
 
-Mount a volume on container start (e.g., docker run -v /host/path:/container/path nginx)
+Mount a volume on container start (e.g., docker run -v /host/path:/container/path nginx)<br/><br/>
 
 `docker run -v /host/path:/container/path nginx`
 
 `docker run -d --name my_container -v my_volume:/data nginx`
 
-Use a volume when running a container
+Use a volume when running a container<br/><br/>
 
 `docker run -d --name my_container -v /my/local/path:/data nginx`
 
-Mount a volume at a specific path
+Mount a volume at a specific path<br/><br/>
 
 `docker volume rm <volume_name>`
 
-Destroy a volume
+Destroy a volume<br/><br/>
 
 `docker run -d --name my_container -v my_volume:/data -v /my/local/path:/config nginx`
 
-Run a container with multiple volumes
+Run a container with multiple volumes<br/><br/>
 
 `docker cp <source-path-on-host> <container-name-or-id>:<destination-path-in-container>`
 
-Copy from Host to Container (e.g., docker cp /path/on/host/file.txt my_container:/path/in/container/)
+Copy from Host to Container (e.g., docker cp /path/on/host/file.txt my_container:/path/in/container/)<br/><br/>
 
 `docker cp /path/on/host/file.txt my_container:/path/in/container/`
 
 `docker cp <container-name-or-id>:<source-path-in-container> <destination-path-on-host>`
 
-Copy from Container to Host (e.g., docker cp my_container:/path/in/container/file.txt /path/on/host/)
+Copy from Container to Host (e.g., docker cp my_container:/path/in/container/file.txt /path/on/host/)<br/><br/>
 
 `docker cp my_container:/path/in/container/file.txt /path/on/host/`
 
 `docker cp /path/on/host/my_directory my_container:/path/in/container/`
 
-Copy a directory from Host to Container
+Copy a directory from Host to Container<br/><br/>
 
 `docker cp my_container:/path/in/container/my_directory /path/on/host/`
 
-Copy a directory from Container to Host
+Copy a directory from Container to Host<br/><br/>
 
 The docker export command is used to export the filesystem of a container as a tarball (archive) without the image layers or history. It creates a snapshot of the container's filesystem at the current state.
 
 `docker export -o container_backup.tar my_container`
 
-Export the filesystem of a running or stopped container into a .tar file.
+Export the filesystem of a running or stopped container into a .tar file.<br/><br/>
 
 `docker export my_container > container_backup.tar`
 
-Export the filesystem and view it directly or pipe it to another command.
+Export the filesystem and view it directly or pipe it to another command.<br/><br/>
 
 `docker network ls`
 
-List All Docker Networks
+List All Docker Networks<br/><br/>
 
 `docker network create <network_name>`
 
-Create a local network
+Create a local network<br/><br/>
 
 `docker run -d --net <network_name> <image-name>`
 
-Attach a container to a network on start
+Attach a container to a network on start<br/><br/>
 
 `docker run -d --name my-app --network my-network nginx`
 
-Create a container and attach it to a specific network
+Create a container and attach it to a specific network<br/><br/>
 
 `docker network connect <network_name> <container_id>`
 
-Connect a running container to a network
+Connect a running container to a network<br/><br/>
 
 `docker network connect my-network1 my-container`
 
 `docker network connect my-network2 my-container`
 
-Attach multiple networks to a container
+Attach multiple networks to a container<br/><br/>
 
 This command creates a network with a specific subnet (my-static-network) and runs a container with a static IP address (172.18.0.10) on that network.
 
