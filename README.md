@@ -1,4 +1,4 @@
-###  What is Docker?
+##  What is Docker?
 
 Containerization Platform: Docker is a platform that allows developers to package applications and their dependencies into isolated environments called containers...
 
@@ -7,7 +7,7 @@ Lightweight Virtualization: Docker containers are much lighter than traditional 
 Portable Application Packaging: Docker allows developers to bundle their application, along with all necessary libraries...
 
 <br/><br/>
-### Why We Use Docker?
+## Why We Use Docker?
 
 Portability: Docker containers package the application with all its dependencies, libraries, and environment settings...
 
@@ -23,14 +23,14 @@ Consistency: Docker eliminates the "works on my machine" problem by bundling the
 
 
 <br/><br/>
-### Docker installation
+## Docker installation
 `https://docs.docker.com/engine/install/`
 
 #### follow the official Docker document
 
 
 <br/><br/>
-### Basic commands 
+## Basic commands 
 `docker login -u [username]`
 
 Login into Docker<br/><br/>
@@ -161,7 +161,7 @@ List all Docker networks<br/><br/>
 
 
 <br/><br/>
-#### Docker Multiple line command
+## Docker Multiple line one command
 
 `docker run \`
 
@@ -184,7 +184,7 @@ List all Docker networks<br/><br/>
 `mysql:5.7`
 
 <br/><br/>
-#### Explanation below here
+### Explanation below here
 
 `docker run \`
 
@@ -346,35 +346,35 @@ Connect a running container to a network<br/><br/>
 
 `docker network connect my-network2 my-container`
 
-Attach multiple networks to a container<br/><br/>
+Attach multiple networks to a container
 
-This command creates a network with a specific subnet (my-static-network) and runs a container with a static IP address (172.18.0.10) on that network.
+This command creates a network with a specific subnet (my-static-network) and runs a container with a static IP address (172.18.0.10) on that network.<br/><br/>
 
-`docker network create --subnet=172.18.0.0/16 my-static-network`
+`docker network create --subnet=172.18.0.0/16 my-static-network`<br/><br/>
 
-`docker run -d --name my-app --network my-static-network --ip 172.18.0.10 nginx`
+`docker run -d --name my-app --network my-static-network --ip 172.18.0.10 nginx`<br/><br/>
 
 `docker network disconnect <network_name> <container_id>`
 
-Disconnect a container from a network
+Disconnect a container from a network<br/><br/>
 
 `docker network disconnect -f my-network $(docker ps -q)`
 
-Disconnect all containers from a network
+Disconnect all containers from a network<br/><br/>
 
 `docker inspect -f '{{ .NetworkSettings.IPAddress }}' <container_id>`
 
-Query a specific metadata of a running container
+Query a specific metadata of a running container<br/><br/>
 
 `docker network inspect my_network`
 
-Disconnect a container from a network
+Disconnect a container from a network<br/><br/>
 
 `docker network rm my_network`
 
 Remove a network
 
-Information: A Dockerfile is a text document that contains a series of instructions on how to build a Docker image. Docker reads the Dockerfile to create an image with the environment and configuration you need for your applications.
+#### Information: A Dockerfile is a text document that contains a series of instructions on how to build a Docker image. Docker reads the Dockerfile to create an image with the environment and configuration you need for your applications.<br/><br/>
 
 `FROM image`
 
@@ -414,11 +414,12 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `VOLUME ["/data"]`
 
-1. Dockerfile for a Node.js Application
+<br/><br/>
 
-#### 1. Dockerfile for a Node.js Application
+## Dockerfile examples
 
-#### 
+### 1. Dockerfile for a Node.js Application
+
 
 `FROM node:14`
 
@@ -436,11 +437,10 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `CMD ["npm", "start"]`
 
-2. Dockerfile for a Python Flask Application
+<br/><br/>
+### 2. Dockerfile for a Python Flask Application
 
-#### 2. Dockerfile for a Python Flask Application
 
-#### 
 
 `FROM python:3.9-slim`
 
@@ -460,11 +460,9 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `CMD ["python", "app.py"]`
 
-3. Dockerfile for a Java Spring Boot Application
+<br/><br/>
+### 3. Dockerfile for a Java Spring Boot Application
 
-#### 3. Dockerfile for a Java Spring Boot Application
-
-#### 
 
 `FROM openjdk:11-jdk-slim`
 
@@ -476,11 +474,9 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `ENTRYPOINT ["java", "-jar", "app.jar"]`
 
-4. Dockerfile for an Nginx-based Static Website
+<br/><br/>
+### 4. Dockerfile for an Nginx-based Static Website
 
-#### 4. Dockerfile for an Nginx-based Static Website
-
-#### 
 
 `FROM nginx:alpine`
 
@@ -488,11 +484,9 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `EXPOSE 80`
 
-5. Dockerfile for a .NET Core Application
+<br/><br/>
+### 5. Dockerfile for a .NET Core Application
 
-#### 5. Dockerfile for a .NET Core Application
-
-#### 
 
 `FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build`
 
@@ -516,11 +510,9 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `ENTRYPOINT ["dotnet", "MyApp.dll"]`
 
-6. Dockerfile for a PHP and Apache Application
+<br/><br/>
+### 6. Dockerfile for a PHP and Apache Application
 
-#### 6. Dockerfile for a PHP and Apache Application
-
-#### 
 
 `FROM php:7.4-apache`
 
@@ -534,11 +526,9 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `CMD ["apache2-foreground"]`
 
-7. Dockerfile for a Ruby on Rails Application
+<br/><br/>
+### 7. Dockerfile for a Ruby on Rails Application
 
-#### 7. Dockerfile for a Ruby on Rails Application
-
-#### 
 
 `FROM ruby:2.7`
 
@@ -556,9 +546,8 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `CMD ["rails", "server", "-b", "0.0.0.0"]`
 
-8. Dockerfile for a React.js Frontend Application
-
-#### 8. Dockerfile for a React.js Frontend Application
+<br/><br/>
+### 8. Dockerfile for a React.js Frontend Application
 
 `FROM node:16 AS build`
 
@@ -580,9 +569,8 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `CMD ["nginx", "-g", "daemon off;"]`
 
-1. Dockerfile for Production-Ready Node.js Application
-
-#### 1. Dockerfile for Production-Ready Node.js Application
+<br/><br/>
+### 9. Dockerfile for Production-Ready Node.js Application
 
 `FROM node:16 AS builder`
 
@@ -612,9 +600,8 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `CMD ["npm", "start"]`
 
-2. Dockerfile for a Microservice (Python Flask + Gunicorn)
-
-#### 2. Dockerfile for a Microservice (Python Flask + Gunicorn)
+<br/><br/>
+### 10. Dockerfile for a Microservice (Python Flask + Gunicorn)
 
 `FROM python:3.9-slim AS base`
 
@@ -646,9 +633,8 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]`
 
-3. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build
-
-#### 3. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build
+<br/><br/>
+### 11. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build
 
 `FROM maven:3.8.4-openjdk-11 AS build`
 
@@ -672,9 +658,8 @@ Information: A Dockerfile is a text document that contains a series of instructi
 
 `CMD ["java", "-jar", "myapp.jar"]`
 
-4. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)
-
-#### 4. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)
+<br/><br/>
+### 12. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)
 
 `FROM node:16-alpine AS builder`
 
