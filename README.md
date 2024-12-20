@@ -20,9 +20,12 @@ Scalability: Docker integrates well with container orchestration tools like Kube
 
 Consistency: Docker eliminates the "works on my machine" problem by bundling the app and its dependencies into a single image. This ensures that the application behaves the same across all environments (development, testing, and production).
 
-`https://docs.docker.com/engine/install/`
 
 follow the official Docker document
+
+`https://docs.docker.com/engine/install/`
+
+
 
 `docker login -u [username]`
 
