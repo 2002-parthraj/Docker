@@ -1,756 +1,691 @@
-****Index****
+### 1. What is Docker?
 
-Docker Explanation
-Docker-installation
-Docker-hub
-Basic-commands
-inspect-container
-volumes
-copy-commands
-export-commands
-network
-Multi-option Docker Run Command
-How to make Dockerfile
-Dockerfile Example
+Containerization Platform: Docker is a platform that allows developers to package applications and their dependencies into isolated environments called containers...
 
+Lightweight Virtualization: Docker containers are much lighter than traditional virtual machines because they share the host OS’s kernel...
 
+Portable Application Packaging: Docker allows developers to bundle their application, along with all necessary libraries...
 
+### 2. Why We Use Docker?
 
-**********************************Docker Explanation**********************************
+Portability: Docker containers package the application with all its dependencies, libraries, and environment settings...
 
-1. What is Docker ?
+Efficiency: Unlike traditional virtual machines that require a full OS, Docker containers share the host OS’s kernel...
 
-"Containerization Platform": Docker is a platform that allows developers to package applications and their dependencies into isolated environments called containers. These containers can run anywhere, ensuring consistency across various environments like development, testing, and production.
+Fast Deployment: Docker enables rapid application deployment by packaging code and its environment together...
 
-"Lightweight Virtualization": Docker containers are much lighter than traditional virtual machines because they share the host operating system’s kernel instead of requiring a full OS for each instance. This reduces the overhead and enables fast startup times.
+Isolation: Each Docker container runs in its own isolated environment with its own file system, network, and process space. This ensures that applications won’t interfere with each other, providing security and stability, especially when multiple apps run on the same host.
 
-"Portable Application Packaging": Docker allows developers to bundle their application, along with all necessary libraries, binaries, and configurations, into a portable container image. These images can be easily shared and deployed across different systems without worrying about environment inconsistencies.
+Scalability: Docker integrates well with container orchestration tools like Kubernetes, making it easy to scale applications horizontally. You can quickly spin up multiple replicas of containers to handle increased traffic or workload, enabling seamless scaling.
 
+Consistency: Docker eliminates the "works on my machine" problem by bundling the app and its dependencies into a single image. This ensures that the application behaves the same across all environments (development, testing, and production).
 
+`https://docs.docker.com/engine/install/`
 
-2. why we use Docker ?
+follow the official Docker document
 
-"Portability": Docker containers package the application with all its dependencies, libraries, and environment settings, allowing it to run consistently across different environments (local, test, production) without configuration changes or compatibility issues.
+`docker login -u [username]`
 
-"Efficiency": Unlike traditional virtual machines that require a full OS, Docker containers share the host OS’s kernel, making them lightweight and faster to start. This allows multiple containers to run on a single host with minimal resource overhead.
+Login into Docker
 
-"Fast Deployment": Docker enables rapid application deployment by packaging code and its environment together. Containers can be spun up in seconds, enabling faster development, testing, and deployment cycles. Rolling back to previous versions is also simple with versioned images.
+`docker push [username]/[image_name]`
 
-"Isolation": Each Docker container runs in its own isolated environment with its own file system, network, and process space. This ensures that applications won’t interfere with each other, providing security and stability, especially when multiple apps run on the same host.
+Publish an image to Docker Hub
 
-"Scalability": Docker integrates well with container orchestration tools like Kubernetes, making it easy to scale applications horizontally. You can quickly spin up multiple replicas of containers to handle increased traffic or workload, enabling seamless scaling.
+`docker search [image_name]`
 
-"Consistency": Docker eliminates the "works on my machine" problem by bundling the app and its dependencies into a single image. This ensures that the application behaves the same across all environments (development, testing, and production).
+Search Hub for an image
 
+`docker pull [image_name]`
 
+Pull an image from a Docker Hub
 
+`docker --help`
 
+Get help with Docker. Can also use –help on all subcommands
 
+`docker info`
 
+Display system-wide information
 
+`docker ps`
 
+List running containers
 
+`docker ps --all`
 
-**********************************docker-installation**********************************
+List all docker containers (running and stopped)
 
-https://docs.docker.com/engine/install/
+`docker build -t [image_name]`
 
+Build an Image from a Dockerfile
 
+`docker build -t <image_name> . --no-cache`
 
+Build an image from a Dockerfile without the cache
 
+`docker build --tag myimage:01 .`
 
+Build an image from Dockerfile in the current directory (first tag)
 
+`docker images`
 
+List local images
 
-***********************************Docker-HUB***********************************
-* * Docker Hub is a service provided by Docker for finding and sharing
-* * container images with your team. Learn more and find images
-* * at https://hub.docker.com
+`docker start|stop [container_name] or [container-id]`
 
+Start or stop an existing container
 
-* * Login into Docker
-docker login -u <username>
+`docker rmi [image_name]`
 
-* * Publish an image to Docker Hub
-docker push <username>/<image_name>
+Delete an Image
 
-* * Search Hub for an image
-docker search <image_name>
+`docker restart [container_name]`
 
-* * Pull an image from a Docker Hub
-docker pull <image_name>
+Restart a container
 
-* * Get help with Docker. Can also use –help on all subcommands
-docker --help
+`docker rm <container_name>`
 
-* * Display system-wide information
-docker info
+Remove a stopped container
 
+`docker kill <container_name>`
 
+Kill the container
 
+`docker rm -f <container_name>`
 
+Destroy the container
 
+`docker pause <container_name>`
 
+Suspend a container
 
+`docker unpause <container_name>`
 
-***************************************Basic-commands*************************************
+Resume a container
 
+`docker image prune`
 
-* *List running containers
-docker ps  
+Remove all unused images
 
-* * List all docker containers (running and stopped):
-docker ps --all
+`docker rmi $(docker images -q -f "dangling=true")`
 
-* *Build an Image from a Dockerfile
-docker build -t <image_name>
+Remove dangling images
 
-* * Build an Image from a Dockerfile without the cache
-docker build -t <image_name> . –no-cache
+`docker run -d <image_name>`
 
-* * Build an image from Dockerfile in current directory
-docker build --tag myimage:01 . 
-docker build --tag myimage:02 . 
+Run a container in the background
 
-* * List local images
-docker images
+`docker exec -it <container_name> sh`
 
-* * Start or stop an existing container
-docker start|stop <container_name> (or <container-id>)
+Open a shell inside a running container
 
-* * Delete an Image
-docker rmi <image_name>
+`docker run -it ubuntu bash`
 
-* *Restart a container
-docker restart <container name>
+Run a container from the Ubuntu image and open a bash shell inside it
 
-* * Remove a stopped container
-docker rm <container_name>
+`docker run -p <host_port>:<container_port> -d <image_name>`
 
-* * kill he container 
-docker kill <container_name>
+Run a container and publish a container’s port(s) to the host
 
-* * Destroy the container
-docker rm -f <container_name>
+`docker run --name <container_name> <image_name>`
 
-* * suspend container
-docker pause
+Create and run a container from an image with a custom name
 
-* * resume container
-docker unpause
+`docker -d`
 
-* * Remove all unused images
-docker image prune
-docker rmi $(docker images \ -q -f "dangling=true")
+Start the Docker daemon
 
-* * Run a container in the background
-docker run -d <image_name>
+`docker history <image_name>`
 
-* * Open a shell inside a running container
-docker exec -it <container_name> sh
+View the history of an image, showing layers and commands used to build it
 
-* * Run a container from the Ubuntu image and open a bash shell inside it
-docker run -it ubuntu bash
+`docker save -o my_redis_image.tar redis`
 
-* * Run a container with and publish a container’s port(s) to the host.
-docker run -p <host_port>:<container_port> -d <image_name> 
-docker run -p <host_port>:<container_port> <image_name>
+Save an image to a tar file
 
-* * Create and run a container from an image, with a custom name:
-docker run --name <container_name> <image_name>
+`docker load -i my_redis_image.tar`
 
-* * Start the docker daemon
-docker -d 
+Load an image from a tar file
 
-* * The docker history command is used to view the history of an image, showing the layers and commands used to build
-(--no-trunc: Don’t truncate the output.)
-(-q, --quiet: Only show image IDs.)
-docker history <image_name> 
+`docker network ls`
 
+List all Docker networks
 
-* * The docker save command is used to export one or more Docker images to a tar archive. This is useful for saving and sharing images without needing to re-pull them from a remote registry.
+#### Docker Multiple line command
 
-* * Save an Image to a Tar File
-docker save -o my_redis_image.tar redis
+`docker run \`
 
-* * Save Multiple Images to a Tar File
-docker save -o my_images.tar redis alpine nginx
+`--name my-container \`
 
-* * Save an Image and Pipe to Gzip for Compression
-docker save redis | gzip > redis_image.tar.gz
+`--network my-network \`
 
+`-d \`
 
+`-p 8080:80 \`
 
+`-e MYSQL_ROOT_PASSWORD=rootpassword \`
 
+`-e MYSQL_DATABASE=mydb \`
 
+`-v /my/local/data:/var/lib/mysql \`
 
+`--restart always \`
 
-**************************************inspect-container*************************************
+`mysql:5.7`
 
+#### Explanation below here
 
+`docker run \`
 
-* * Fetch and follow the logs of a container ,live logs
-docker logs -f <container_name>
+— Starts the Docker run command.
 
-* * Show exposed ports of a container
-docker port <container_id> 
+`--name my-container \`
 
-* * To inspect a running container
-docker inspect <container_name> (or <container_id>)
+— Sets the container name to my-container.
 
-* * View resource usage stats
-docker container stats
+`--network my-network \`
 
-* *Check docker daemon disk space usage
-docker system df
+— Connects the container to the my-network network.
 
-* *Remove images, networks, containers, and volumes
-docker system prune -af
+`-d \`
 
-* * show the diffrences with the images (modified files)
-docker diff <container_name>
+— Runs the container in detached mode (in the background).
 
-* * list the process runnnig on the container 
-docker top <container_name>
+`-p 8080:80 \`
 
+— Maps port 8080 on the host to port 80 on the container.
 
+`-e MYSQL_ROOT_PASSWORD=rootpassword \`
 
+— Sets the environment variable MYSQL_ROOT_PASSWORD with the value rootpassword.
 
+`-e MYSQL_DATABASE=mydb \`
 
+— Sets another environment variable MYSQL_DATABASE with the value mydb.
 
-**************************************Docker volumes*************************************
+`-v /my/local/data:/var/lib/mysql \`
 
-* * List volumes
-docker volume ls
+— Mounts a volume from the host (/my/local/data) to the container (/var/lib/mysql).
 
-* * Create a local volume
-docker volume create --name <volume_name>
+`--restart always \`
 
-* *  Inspect a Volume (This shows detailed information about the volume, including the mount point, driver, and any containers using it)
-docker volume inspect my_volume
+— Configures the container to always restart if it stops.
 
-* *  Mounting a volume on container start (Mount /host/path from the host into /container/path inside the container)
-docker run -v <volume_name>:/data <image-name>
-ex->> docker run -v /host/path:/container/path nginx
+`mysql:5.7`
 
-* * Use a Volume When Running a Container (This runs an nginx container with the volume my_volume mounted at the /data directory inside the container.)
-docker run -d --name my_container -v my_volume:/data nginx
+— Specifies the Docker image and version to run (mysql:5.7).
 
-* * Mount a Volume at a Specific Path
-docker run -d --name my_container -v /my/local/path:/data nginx
+`docker logs -f <container_name>`
 
-* * Destroy a volume
-docker volume rm <volume_name>
+Fetch and follow the logs of a container (live logs)
 
-* * Run a Container with Multiple Volumes (This runs a container with two volumes my_volume mounted at /data ;;Host directory 
-* * /my/local/path mounted at /config)
-docker run -d --name my_container -v my_volume:/data -v /my/local/path:/config nginx
+`docker port <container_id>`
 
+Show exposed ports of a container
 
+`docker inspect <container_name>`
 
+Inspect a running container
 
+`docker container stats`
 
+View resource usage stats
 
+`docker system df`
 
+Check Docker daemon disk space usage
 
-**************************************Docker copy-commands*************************************
+`docker system prune -af`
 
+Remove images, networks, containers, and volumes
 
-* * Copy from Host to Container
-docker cp <source-path-on-host> <container-name-or-id>:<destination-path-in-container>
-exe=docker cp /path/on/host/file.txt my_container:/path/in/container/
+`docker diff <container_name>`
 
-* * Copy from Container to Host
-docker cp <container-name-or-id>:<source-path-in-container> <destination-path-on-host>
-exe=docker cp my_container:/path/in/container/file.txt /path/on/host/
+Show differences with the images (modified files)
 
-* * Copy a Directory from Host to Container
-docker cp /path/on/host/my_directory my_container:/path/in/container/
+`docker top <container_name>`
 
-* * Copy a Directory from Container to Host
-docker cp my_container:/path/in/container/my_directory /path/on/host/
+List the processes running on the container
 
+`docker volume ls`
 
+List volumes
 
+`docker volume create --name <volume_name>`
 
+Create a local volume
 
+`docker volume inspect my_volume`
 
+Inspect a volume for detailed information
 
-**************************************export-commands*************************************
+`docker run -v <volume_name>:/data <image-name>`
 
+Mount a volume on container start (e.g., docker run -v /host/path:/container/path nginx)
 
-* * The docker export command is used to export the filesystem of a container as a tarball (archive) without the image layers or history. It creates a snapshot of the container's filesystem at the current state.
+`docker run -v /host/path:/container/path nginx`
 
-* * This command exports the filesystem of a running or stopped container into a .tar file
-docker export -o container_backup.tar my_container
+`docker run -d --name my_container -v my_volume:/data nginx`
 
-* * if you want to export the filesystem and view it directly or pipe it to another command
-docker export my_container > container_backup.tar
+Use a volume when running a container
 
+`docker run -d --name my_container -v /my/local/path:/data nginx`
 
+Mount a volume at a specific path
 
+`docker volume rm <volume_name>`
 
+Destroy a volume
 
+`docker run -d --name my_container -v my_volume:/data -v /my/local/path:/config nginx`
 
-**************************************Docker Network*************************************
+Run a container with multiple volumes
 
-* * List All Docker Networks
-docker network ls
+`docker cp <source-path-on-host> <container-name-or-id>:<destination-path-in-container>`
 
-* * Create a local network
-docker network create <network_name>
+Copy from Host to Container (e.g., docker cp /path/on/host/file.txt my_container:/path/in/container/)
 
-* * Attach a container to a network on start
-docker run -d --net <network_name> <image-name>
+`docker cp /path/on/host/file.txt my_container:/path/in/container/`
 
-* * Create a Container and Attach it to a Specific Network
-docker run -d --name my-app --network my-network nginx
+`docker cp <container-name-or-id>:<source-path-in-container> <destination-path-on-host>`
 
-* * Connect a running container from a network
-docker network connect <network_name> <container_id>
+Copy from Container to Host (e.g., docker cp my_container:/path/in/container/file.txt /path/on/host/)
 
-* * Attach Multiple Networks to a Container
-docker network connect my-network1 my-container
-docker network connect my-network2 my-container
+`docker cp my_container:/path/in/container/file.txt /path/on/host/`
 
-* *Run a Container with a Static IP
-"This command creates a network with a specific subnet (my-static-network) and runs a container with a static IP address (172.18.0.10) on that network."
+`docker cp /path/on/host/my_directory my_container:/path/in/container/`
 
-docker network create --subnet=172.18.0.0/16 my-static-network
-docker run -d --name my-app --network my-static-network --ip 172.18.0.10 nginx
+Copy a directory from Host to Container
 
+`docker cp my_container:/path/in/container/my_directory /path/on/host/`
 
-* * Disconnect container to a network
-docker network disconnect <network_name> <container_id>
+Copy a directory from Container to Host
 
-* * Disconnect All Containers from a Network
-docker network disconnect -f my-network $(docker ps -q)
+The docker export command is used to export the filesystem of a container as a tarball (archive) without the image layers or history. It creates a snapshot of the container's filesystem at the current state.
 
-* * Query a specific metadata of a running container
-docker inspect -f '{{ .NetworkSettings.IPAddress }}' <container_id>
+`docker export -o container_backup.tar my_container`
 
-* * Disconnect a Container from a Network
-docker network inspect my_network
+Export the filesystem of a running or stopped container into a .tar file.
 
-* * Remove a Network
-docker network rm my_network
+`docker export my_container > container_backup.tar`
 
+Export the filesystem and view it directly or pipe it to another command.
 
+`docker network ls`
 
+List All Docker Networks
 
-**************Example: Multi-option Docker Run Command*************
-docker run \
-  --name my-container \
-  --network my-network \
-  -d \
-  -p 8080:80 \
-  -e MYSQL_ROOT_PASSWORD=rootpassword \
-  -e MYSQL_DATABASE=mydb \
-  -v /my/local/data:/var/lib/mysql \
-  --restart always \
-  mysql:5.7
+`docker network create <network_name>`
 
+Create a local network
 
-* * Explanation:
+`docker run -d --net <network_name> <image-name>`
 
-docker run \ — Starts the Docker run command.
+Attach a container to a network on start
 
---name my-container \ — Sets the container name to my-container.
+`docker run -d --name my-app --network my-network nginx`
 
---network my-network \ — Connects the container to the my-network network.
+Create a container and attach it to a specific network
 
--d \ — Runs the container in detached mode (in the background).
+`docker network connect <network_name> <container_id>`
 
--p 8080:80 \ — Maps port 8080 on the host to port 80 on the container.
+Connect a running container to a network
 
--e MYSQL_ROOT_PASSWORD=rootpassword \ — Sets the environment variable MYSQL_ROOT_PASSWORD with the value rootpassword.
+`docker network connect my-network1 my-container`
 
--e MYSQL_DATABASE=mydb \ — Sets another environment variable MYSQL_DATABASE with the value mydb.
+`docker network connect my-network2 my-container`
 
--v /my/local/data:/var/lib/mysql \ — Mounts a volume from the host (/my/local/data) to the container (/var/lib/mysql).
+Attach multiple networks to a container
 
---restart always \ — Configures the container to always restart if it stops.
+This command creates a network with a specific subnet (my-static-network) and runs a container with a static IP address (172.18.0.10) on that network.
 
-mysql:5.7 — Specifies the Docker image and version to run (mysql:5.7).
+`docker network create --subnet=172.18.0.0/16 my-static-network`
 
+`docker run -d --name my-app --network my-static-network --ip 172.18.0.10 nginx`
 
+`docker network disconnect <network_name> <container_id>`
 
+Disconnect a container from a network
 
+`docker network disconnect -f my-network $(docker ps -q)`
 
+Disconnect all containers from a network
 
+`docker inspect -f '{{ .NetworkSettings.IPAddress }}' <container_id>`
 
+Query a specific metadata of a running container
 
+`docker network inspect my_network`
 
+Disconnect a container from a network
 
+`docker network rm my_network`
 
+Remove a network
 
-*************************************How to make Dockerfile*************************************
-A Dockerfile is a text document that contains a series of instructions on how to build a Docker image. Docker reads the Dockerfile to create an image with the environment and configuration you need for your applications.
+Information: A Dockerfile is a text document that contains a series of instructions on how to build a Docker image. Docker reads the Dockerfile to create an image with the environment and configuration you need for your applications.
 
+`FROM image`
 
-FROM image                  "base image for the build"
-    FROM ubuntu:20.04
+`FROM ubuntu:20.04`
 
-LABEL (Metadata)            Used to add metadata to the image, like maintainer information.
-    LABEL maintainer="your-email@example.com"
+`LABEL (Metadata)`
 
-COPY path dst               Copies files from your host system to the image.
-    COPY ./local-file /app/remote-file
+`LABEL maintainer="your-email@example.com"`
 
-ADD path dst                Similar to COPY, but it can also extract compressed files (like .tar.gz) and copy them directly into the container.
-    ADD myapp.tar.gz /app
+`COPY path dst`
 
-RUN args                    Executes commands in the container at build time and commits the results to the image.
-    RUN apt-get update && apt-get install -y curl
+`COPY ./local-file /app/remote-file`
 
-USER name                   set the default username
+`ADD path dst`
 
-WORKDIR path                Sets the working directory inside the container for subsequent instructions like RUN, CMD, ENTRYPOINT
-    WORKDIR /app
+`ADD myapp.tar.gz /app`
 
+`RUN args`
 
-CMD args                    Provides default commands to be executed when a container starts. If overridden
-    CMD ["node", "app.js"]
+`RUN apt-get update && apt-get install -y curl`
 
-EXPOSE xxxx xxxx            Informs Docker that the container will listen on the specified network ports at runtime.
-    EXPOSE 8080 
+`USER name`
 
-VOLUME  mp                    Declares a mount point, so Docker can store data in a volume
-    VOLUME ["/data"]
+`WORKDIR path`
 
+`WORKDIR /app`
 
+`CMD args`
 
+`CMD ["node", "app.js"]`
 
+`EXPOSE xxxx:xxxx`
 
+`EXPOSE 8080`
 
-************Dockerfile Example**************
+`VOLUME mp`
 
-"1. Dockerfile for a Node.js Application"
+`VOLUME ["/data"]`
 
-* * Use an official Node.js runtime as a parent image
-FROM node:14
+1. Dockerfile for a Node.js Application
 
-* * Set the working directory inside the container
-WORKDIR /app
+#### 1. Dockerfile for a Node.js Application
 
-* * Copy the package.json and package-lock.json files into the container
-COPY package*.json ./
+#### 
 
-* * Install dependencies
-RUN npm install
+`FROM node:14`
 
-* * Copy the rest of the application code into the container
-COPY . .
+`WORKDIR /app`
 
-* * Set environment variables
-ENV NODE_ENV=production
+`COPY package*.json ./`
 
-* * Expose the app's port
-EXPOSE 3000
+`RUN npm install`
 
-* * Start the application
-CMD ["npm", "start"]
+`COPY . .`
 
+`ENV NODE_ENV=production`
 
+`EXPOSE 3000`
 
-"2. Dockerfile for a Python Flask Application"
-* * Use an official Python runtime as a parent image
-FROM python:3.9-slim
+`CMD ["npm", "start"]`
 
-* * Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+2. Dockerfile for a Python Flask Application
 
-* * Set the working directory inside the container
-WORKDIR /app
+#### 2. Dockerfile for a Python Flask Application
 
-* * Install dependencies from requirements.txt
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+#### 
 
-* * Copy the rest of the application code into the container
-COPY . .
+`FROM python:3.9-slim`
 
-* * Expose the port the app runs on
-EXPOSE 5000
+`ENV PYTHONDONTWRITEBYTECODE=1`
 
-* * Run the Flask app
-CMD ["python", "app.py"]
+`ENV PYTHONUNBUFFERED=1`
 
+`WORKDIR /app`
 
-"3. Dockerfile for a Java Spring Boot Application"
-* * Use an official OpenJDK image as a parent image
-FROM openjdk:11-jdk-slim
+`COPY requirements.txt ./`
 
-* * Set the working directory inside the container
-WORKDIR /app
+`RUN pip install --no-cache-dir -r requirements.txt`
 
-* * Add the JAR file to the container
-COPY target/myapp-0.0.1-SNAPSHOT.jar app.jar
+`COPY . .`
 
-* * Expose the port the app runs on
-EXPOSE 8080
+`EXPOSE 5000`
 
-* * Run the Spring Boot app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+`CMD ["python", "app.py"]`
 
+3. Dockerfile for a Java Spring Boot Application
 
-"4. Dockerfile for an Nginx-based Static Website"
-* * Use the official Nginx image as a base image
-FROM nginx:alpine
+#### 3. Dockerfile for a Java Spring Boot Application
 
-* * Copy static website files to the default Nginx public directory
-COPY ./public /usr/share/nginx/html
+#### 
 
-* * Expose port 80
-EXPOSE 80
+`FROM openjdk:11-jdk-slim`
 
+`WORKDIR /app`
 
-"5. Dockerfile for a .NET Core Application"
-* * Use the .NET SDK to build the app
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /app
+`COPY target/myapp-0.0.1-SNAPSHOT.jar app.jar`
 
-* * Copy and restore dependencies
-COPY *.csproj ./
-RUN dotnet restore
+`EXPOSE 8080`
 
-* * Copy the rest of the application code
-COPY . ./
-RUN dotnet publish -c Release -o out
+`ENTRYPOINT ["java", "-jar", "app.jar"]`
 
-* * Use the .NET Runtime image for the final image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
-WORKDIR /app
-COPY --from=build /app/out ./
+4. Dockerfile for an Nginx-based Static Website
 
-* * Expose the port the app runs on
-EXPOSE 80
+#### 4. Dockerfile for an Nginx-based Static Website
 
-* * Run the .NET Core app
-ENTRYPOINT ["dotnet", "MyApp.dll"]
+#### 
 
+`FROM nginx:alpine`
 
-"6. Dockerfile for a PHP and Apache Application"
-* * Use an official PHP-Apache image as a base image
-FROM php:7.4-apache
+`COPY ./public /usr/share/nginx/html`
 
-* * Copy application files into the default web root directory
-COPY ./src /var/www/html/
+`EXPOSE 80`
 
-* * Set file permissions
-RUN chown -R www-data:www-data /var/www/html
+5. Dockerfile for a .NET Core Application
 
-* * Enable mod_rewrite for Apache
-RUN a2enmod rewrite
+#### 5. Dockerfile for a .NET Core Application
 
-* * Expose the web server port
-EXPOSE 80
+#### 
 
-* * Start Apache in the foreground
-CMD ["apache2-foreground"]
+`FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build`
 
+`WORKDIR /app`
 
-"7. Dockerfile for a Ruby on Rails Application"
+`COPY *.csproj ./`
 
-* * Use the official Ruby image
-FROM ruby:2.7
+`RUN dotnet restore`
 
-* * Install dependencies
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+`COPY . ./`
 
-* * Set the working directory inside the container
-WORKDIR /app
+`RUN dotnet publish -c Release -o out`
 
-* * Copy the Gemfile and Gemfile.lock and install gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
+`FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime`
 
-* * Copy the rest of the application code into the container
-COPY . .
+`WORKDIR /app`
 
-* * Expose the Rails server port
-EXPOSE 3000
+`COPY --from=build /app/out ./`
 
-* * Start the Rails server
-CMD ["rails", "server", "-b", "0.0.0.0"]
+`EXPOSE 80`
 
+`ENTRYPOINT ["dotnet", "MyApp.dll"]`
 
-"8. Dockerfile for a React.js Frontend Application"
-* * Use Node.js for building the React app
-FROM node:16 AS build
+6. Dockerfile for a PHP and Apache Application
 
-WORKDIR /app
+#### 6. Dockerfile for a PHP and Apache Application
 
-* * Install dependencies
-COPY package*.json ./
-RUN npm install
+#### 
 
-* * Copy the rest of the application code
-COPY . .
+`FROM php:7.4-apache`
 
-* * Build the React app for production
-RUN npm run build
+`COPY ./src /var/www/html/`
 
-* * Use Nginx to serve the built files
-FROM nginx:alpine
+`RUN chown -R www-data:www-data /var/www/html`
 
-COPY --from=build /app/build /usr/share/nginx/html
+`RUN a2enmod rewrite`
 
-EXPOSE 80
+`EXPOSE 80`
 
-CMD ["nginx", "-g", "daemon off;"]
+`CMD ["apache2-foreground"]`
 
+7. Dockerfile for a Ruby on Rails Application
 
+#### 7. Dockerfile for a Ruby on Rails Application
 
+#### 
 
+`FROM ruby:2.7`
 
+`RUN apt-get update -qq && apt-get install -y nodejs postgresql-client`
 
-**********Advanced Examples of Dockerfile*************
+`WORKDIR /app`
 
+`COPY Gemfile Gemfile.lock ./`
 
-"1. Dockerfile for Production-Ready Node.js Application"
-This Dockerfile example optimizes the build for a production Node.js application using multi-stage builds and non-root users.
+`RUN bundle install`
 
-* * Stage 1: Build the app
-FROM node:16 AS builder
+`COPY . .`
 
-* * Set the working directory
-WORKDIR /app
+`EXPOSE 3000`
 
-* * Install dependencies first to leverage Docker's caching mechanism
-COPY package*.json ./
-RUN npm install --production
+`CMD ["rails", "server", "-b", "0.0.0.0"]`
 
-* * Copy the rest of the application code
-COPY . .
+8. Dockerfile for a React.js Frontend Application
 
-* * Build the app for production
-RUN npm run build
+#### 8. Dockerfile for a React.js Frontend Application
 
-* * Stage 2: Create a minimal production image
-FROM node:16-alpine
+`FROM node:16 AS build`
 
-* * Set a non-root user for better security
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
+`WORKDIR /app`
 
-* * Set the working directory
-WORKDIR /app
+`COPY package*.json ./`
 
-* * Copy only the necessary files from the builder stage
-COPY --from=builder /app/build /app
+`RUN npm install`
 
-* * Expose the app port
-EXPOSE 3000
+`COPY . .`
 
-* * Set environment variables
-ENV NODE_ENV=production
+`RUN npm run build`
 
-* * Run the application
-CMD ["npm", "start"]
+`FROM nginx:alpine`
 
+`COPY --from=build /app/build /usr/share/nginx/html`
 
-"2. Dockerfile for a Microservice (Python Flask + Gunicorn)"
-This example demonstrates a Dockerfile for a Python Flask microservice that uses Gunicorn for production readiness.
+`EXPOSE 80`
 
-* * Stage 1: Base image
-FROM python:3.9-slim AS base
+`CMD ["nginx", "-g", "daemon off;"]`
 
-* * Set environment variables to disable buffering
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+1. Dockerfile for Production-Ready Node.js Application
 
-* * Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpq-dev \
-    --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
+#### 1. Dockerfile for Production-Ready Node.js Application
 
-* * Set a working directory
-WORKDIR /app
+`FROM node:16 AS builder`
 
-* * Install Python dependencies
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+`WORKDIR /app`
 
-* * Stage 2: Application code
-FROM base AS final
+`COPY package*.json ./`
 
-* * Copy the application code into the container
-COPY . .
+`RUN npm install --production`
 
-* * Expose the app port
-EXPOSE 5000
+`COPY . .`
 
-* * Command to run the app
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+`RUN npm run build`
 
+`FROM node:16-alpine`
 
-"3. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build"
-This example shows a production-grade Spring Boot Dockerfile using multi-stage builds to reduce the final image size.
+`RUN addgroup -S appgroup && adduser -S appuser -G appgroup`
 
-* * Stage 1: Build the app
-FROM maven:3.8.4-openjdk-11 AS build
+`USER appuser`
 
-* * Set working directory
-WORKDIR /app
+`WORKDIR /app`
 
-* * Copy pom.xml and install dependencies
-COPY pom.xml .
-RUN mvn dependency:go-offline
+`COPY --from=builder /app/build /app`
 
-* * Copy the source code and build the app
-COPY src ./src
-RUN mvn package -DskipTests
+`EXPOSE 3000`
 
-* * Stage 2: Create a minimal runtime image
-FROM openjdk:11-jre-slim
+`ENV NODE_ENV=production`
 
-* * Set working directory
-WORKDIR /app
+`CMD ["npm", "start"]`
 
-* * Copy only the JAR file from the build stage
-COPY --from=build /app/target/myapp.jar ./myapp.jar
+2. Dockerfile for a Microservice (Python Flask + Gunicorn)
 
-* * Expose the application port
-EXPOSE 8080
+#### 2. Dockerfile for a Microservice (Python Flask + Gunicorn)
 
-* * Run the JAR file
-CMD ["java", "-jar", "myapp.jar"]
+`FROM python:3.9-slim AS base`
 
+`ENV PYTHONDONTWRITEBYTECODE=1`
 
+`ENV PYTHONUNBUFFERED=1`
 
-"4. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)"
-This Dockerfile example is designed for building Node.js applications within a CI/CD environment. It integrates Docker into the build process using the Docker-in-Docker (DinD) technique.
+`RUN apt-get update && apt-get install -y \`
 
-* * Stage 1: Build the Node.js app
-FROM node:16-alpine AS builder
+`build-essential \`
 
-* * Install dependencies
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --production
+`libpq-dev \`
 
-* * Copy the rest of the application code
-COPY . .
-RUN npm run build
+`--no-install-recommends && \`
 
-* * Stage 2: DinD (Docker in Docker) for CI/CD
-FROM docker:20.10.7-dind
+`rm -rf /var/lib/apt/lists/*`
 
-* * Install Docker client and Node.js runtime
-RUN apk add --no-cache nodejs npm
+`WORKDIR /app`
 
-* * Copy the built files from the previous stage
-WORKDIR /app
-COPY --from=builder /app /app
+`COPY requirements.txt ./`
 
-* * Expose the Docker daemon for CI/CD tools like Jenkins or GitLab CI
-EXPOSE 2375
+`RUN pip install --no-cache-dir -r requirements.txt`
 
-* * Start Docker daemon and app
-CMD ["dockerd-entrypoint.sh"]
+`FROM base AS final`
 
+`COPY . .`
 
+`EXPOSE 5000`
+
+`CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]`
+
+3. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build
+
+#### 3. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build
+
+`FROM maven:3.8.4-openjdk-11 AS build`
+
+`WORKDIR /app`
+
+`COPY pom.xml .`
+
+`RUN mvn dependency:go-offline`
+
+`COPY src ./src`
+
+`RUN mvn package -DskipTests`
+
+`FROM openjdk:11-jre-slim`
+
+`WORKDIR /app`
+
+`COPY --from=build /app/target/myapp.jar ./myapp.jar`
+
+`EXPOSE 8080`
+
+`CMD ["java", "-jar", "myapp.jar"]`
+
+4. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)
+
+#### 4. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)
+
+`FROM node:16-alpine AS builder`
+
+`WORKDIR /app`
+
+`COPY package*.json ./`
+
+`RUN npm install --production`
+
+`COPY . .`
+
+`RUN npm run build`
+
+`FROM docker:20.10.7-dind`
+
+`RUN apk add --no-cache nodejs npm`
+
+`WORKDIR /app`
+
+`COPY --from=builder /app /app`
+
+`EXPOSE 2375`
+
+`CMD ["dockerd-entrypoint.sh"]`
