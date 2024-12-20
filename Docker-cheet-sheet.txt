@@ -26,13 +26,6 @@ Dockerfile Example
 
 "Portable Application Packaging": Docker allows developers to bundle their application, along with all necessary libraries, binaries, and configurations, into a portable container image. These images can be easily shared and deployed across different systems without worrying about environment inconsistencies.
 
-"Isolation and Security": Each Docker container runs in isolation from others, providing security and stability. The application in a container has its own file system, network, and process tree, ensuring that containers don’t interfere with each other or the host system.
-
-"Simplifies DevOps (CI/CD)": Docker plays a crucial role in modern DevOps practices. By using containers in CI/CD pipelines, development teams can quickly test, deploy, and roll back changes with confidence that the application will behave the same across environments.
-
-"Microservices Architecture": Docker supports the microservices model, where large applications are split into smaller, independent services, each running in its own container. This enables easy scaling, independent updates, and more modular software design.
-
-"Community and Ecosystem": Docker has a huge ecosystem of tools, integrations, and community support. The Docker Hub provides a repository of ready-made container images for common applications, reducing the time needed to build environments from scratch.
 
 
 2. why we use Docker ?
@@ -49,7 +42,6 @@ Dockerfile Example
 
 "Consistency": Docker eliminates the "works on my machine" problem by bundling the app and its dependencies into a single image. This ensures that the application behaves the same across all environments (development, testing, and production).
 
-"CI/CD Integration": Docker fits naturally into CI/CD pipelines by allowing you to create consistent environments for testing and deployment. The same container images can be used throughout the development process, ensuring that what passes in testing will work in production.
 
 
 
