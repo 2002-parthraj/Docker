@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Cheatsheet</title>
+    <style>
+        /* Reset and base styles */
+ /* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    padding: 2rem;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Header styles */
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.logo {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+}
+
+.logo-box {
+    width: 100%;
+    height: 100%;
+    background: #3B82F6;
+    border-radius: 8px;
+    position: absolute;
+    animation: bounce 2s infinite;
+}
+
+.logo-box-small {
+    width: 70%;
+    height: 70%;
+    background: #60A5FA;
+    border-radius: 6px;
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    animation: bounce 2s infinite;
+    animation-delay: 0.1s;
+}
+
+.docker-logo {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 1rem;
+    animation: bounce 2s infinite;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: #1F2937;
+    margin-bottom: 1rem;
+}
+
+/* Section styles */
+.section {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.section-header {
+    padding: 1rem 1.5rem;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: background-color 0.2s;
+}
+
+.section-header:hover {
+    background: #F3F4F6;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    color: #1F2937;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-icon {
+    width: 24px;
+    height: 24px;
+    color: #3B82F6;
+}
+
+.section-content {
+    max-height: 0;
+    overflow: hidden;
+    overflow-y: auto; /* Enables vertical scroll only when content exceeds max height */
+    transition: max-height 0.3s ease-out;
+}
+
+.section.active .section-content {
+    max-height: 500px; /* Set max height for scrollable area */
+}
+
+.chevron {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s;
+}
+
+.section.active .chevron {
+    transform: rotate(180deg);
+}
+
+/* Command styles */
+.commands {
+    padding: 1rem 1.5rem; /* Inner padding for commands */
+}
+
+.command {
+    background: #F9FAFB;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    transition: background-color 0.2s;
+}
+
+.command:hover {
+    background: #F3F4F6;
+}
+
+.command-text {
+    flex-grow: 1;
+}
+
+.command-code {
+    font-family: 'Monaco', 'Consolas', monospace;
+    color: #2563EB;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.command-desc {
+    color: #6B7280;
+    font-size: 0.875rem;
+}
+
+.copy-btn {
+    background: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #9CA3AF;
+    transition: color 0.2s;
+}
+
+.copy-btn:hover {
+    color: #3B82F6;
+}
+
+/* Animations */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    body {
+        padding: 1rem;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1rem;
+    }
+
+    .command {
+        flex-direction: column;
+    }
+
+    .copy-btn {
+        margin-top: 0.5rem;
+    }
+}
+
+    </style>
+</head>
+
+<!-- logo-section -->
+
+<div class="container">
+    <header class="header">
+        <div class="logo">
+            <img src="docker-logo-svgrepo-com.svg" alt="Docker Logo" class="docker-logo" />
+        </div>
+        <!-- <h1 class="title">Docker Cheat Sheet</h1> -->
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <body>
+
+        <!-- Docker-explanation Section -->
+        <div class="section">
+            <button class="section-header">
+                <span class="section-title">
+                    <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 17h12M6 12h12M6 7h12"></path>
+                    </svg>
+                    Docker Explanation
+                </span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+        
+            <div class="section-content">
+                <!-- Question 1: What is Docker? -->
+                <div class="commands">
+                    <h3 class="question-title">1. What is Docker?</h3>
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Containerization Platform</strong>: Docker is a platform that allows developers to package applications and their dependencies into isolated environments called containers...</p>
+                        </div>
+                    </div>
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Lightweight Virtualization</strong>: Docker containers are much lighter than traditional virtual machines because they share the host OS’s kernel...</p>
+                        </div>
+                    </div>
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Portable Application Packaging</strong>: Docker allows developers to bundle their application, along with all necessary libraries...</p>
+                        </div>
+                    </div>
+                    <!-- Additional points about Docker... -->
+                </div>
+        
+                <!-- Question 2: Why We Use Docker? -->
+                <div class="commands">
+                    <h3 class="question-title">2. Why We Use Docker?</h3>
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Portability</strong>: Docker containers package the application with all its dependencies, libraries, and environment settings...</p>
+                        </div>
+                    </div>
+
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Efficiency</strong>: Unlike traditional virtual machines that require a full OS, Docker containers share the host OS’s kernel...</p>
+                        </div>
+                    </div>
+
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Fast Deployment</strong>: Docker enables rapid application deployment by packaging code and its environment together...</p>
+                        </div>
+                    </div>
+
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Fast Deployment</strong>: Docker enables rapid application deployment by packaging code and its environment together...</p>
+                        </div>
+                    </div>
+
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Fast Deployment</strong>: Docker enables rapid application deployment by packaging code and its environment together...</p>
+                        </div>
+                    </div>
+
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Isolation</strong>: Each Docker container runs in its own isolated environment with its own file system, network, and process space. This ensures that applications won’t interfere with each other, providing security and stability, especially when multiple apps run on the same host.</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Scalability</strong>: Docker integrates well with container orchestration tools like Kubernetes, making it easy to scale applications horizontally. You can quickly spin up multiple replicas of containers to handle increased traffic or workload, enabling seamless scaling.</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <p class="command-desc"><strong>Consistency</strong>: Docker eliminates the "works on my machine" problem by bundling the app and its dependencies into a single image. This ensures that the application behaves the same across all environments (development, testing, and production).</p>
+                        </div>
+                    </div>
+
+
+                
+                </div>
+            </div>
+        </div>
+
+    <body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+    <!-- Docker-installation Section -->
+
+
+    <div class="section">
+        <button class="section-header">
+            <span class="section-title">
+                <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 17h12M6 12h12M6 7h12"></path>
+                </svg>
+                Docker-installation
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 9l-7 7-7-7"></path>
+            </svg>
+
+
+
+        </button>
+    
+        <div class="section-content">
+            <div class="commands">
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">https://docs.docker.com/engine/install/</code>
+                        <br><br>
+                        <p class="command-desc">follow the official Docker document </p>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('docker ps')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                        </svg>
+                    </button>
+                </div>
+    
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+<!-- new section 2 -->
+
+
+
+    <!-- Docker-HUB Section -->
+    <div class="section">
+        <button class="section-header">
+            <span class="section-title">
+                <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 17h12M6 12h12M6 7h12"></path>
+                </svg>
+                Docker-Hub
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+    
+
+        <div class="section-content">
+            <div class="commands">
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">docker login -u [username]</code><br><br>
+                        <p class="command-desc">Login into Docker</p>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('docker ps')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                        </svg>
+                    </button>
+                </div>
+    
+
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">docker push [username]/[image_name]</code><br><br>
+                        <p class="command-desc">Publish an image to Docker Hub</p>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('docker ps --all')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                        </svg>
+                    </button>
+                </div>
+    
+
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">docker search [image_name]</code><br><br>
+                        <p class="command-desc">Search Hub for an image</p>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('docker build -t [image_name]')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                        </svg>
+                    </button>
+                </div>
+
+
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">docker pull [image_name]</code><br><br>
+                        <p class="command-desc">Pull an image from a Docker Hub</p>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('docker build -t [image_name]')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                        </svg>
+                    </button>
+                </div>
+
+
+
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">docker --help</code><br><br>
+                        <p class="command-desc">Get help with Docker. Can also use –help on all subcommands</p>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('docker build -t [image_name]')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                        </svg>
+                    </button>
+                </div>
+
+
+
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">docker info</code><br><br>
+                        <p class="command-desc">Display system-wide information</p>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('docker build -t [image_name]')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                            <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                        </svg>
+                    </button>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+<!-- new section 3 -->
+
+
+      <div class="section">
+          <button class="section-header">
+              <span class="section-title">
+                  <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 17h12M6 12h12M6 7h12"></path>
+                  </svg>
+                  Basic Commands
+              </span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 9l-7 7-7-7"></path>
+              </svg>
+          </button>
+          
+          <div class="section-content">
+            <div class="commands">
+
+             
+             
+              <!-- Existing and New Commands -->
+
+
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker ps</code><br><br>
+                      <p class="command-desc">List running containers</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker ps')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+          
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker ps --all</code><br><br>
+                      <p class="command-desc">List all docker containers (running and stopped)</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker ps --all')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+          
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker build -t [image_name]</code><br><br>
+                      <p class="command-desc">Build an Image from a Dockerfile</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker build -t [image_name]')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+          
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker build -t &lt;image_name&gt; . --no-cache</code><br><br>
+                      <p class="command-desc">Build an image from a Dockerfile without the cache</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker build -t <image_name> . --no-cache')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+          
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker build --tag myimage:01 .</code><br><br>
+                      <p class="command-desc">Build an image from Dockerfile in the current directory (first tag)</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker build --tag myimage:01 .')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+          
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker images</code><br><br>
+                      <p class="command-desc">List local images</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker images')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+          
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker start|stop [container_name] or [container-id]</code><br><br>
+                      <p class="command-desc">Start or stop an existing container</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker start|stop [container_name] or [container-id]')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+          
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker rmi [image_name]</code><br><br>
+                      <p class="command-desc">Delete an Image</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker rmi [image_name]')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+          
+              <div class="command">
+                  <div class="command-text">
+                      <code class="command-code">docker restart [container_name]</code><br><br>
+                      <p class="command-desc">Restart a container</p>
+                  </div>
+                  <button class="copy-btn" onclick="copyToClipboard('docker restart [container_name]')">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                      </svg>
+                  </button>
+              </div>
+        
+
+
+              <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker rm &lt;container_name&gt;</code><br><br>
+                    <p class="command-desc">Remove a stopped container</p>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('docker rm <container_name>')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                        <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker kill &lt;container_name&gt;</code><br><br>
+                    <p class="command-desc">Kill the container</p>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('docker kill <container_name>')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                        <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker rm -f &lt;container_name&gt;</code><br><br>
+                    <p class="command-desc">Destroy the container</p>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('docker rm -f <container_name>')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                        <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker pause &lt;container_name&gt;</code><br><br>
+                    <p class="command-desc">Suspend a container</p>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('docker pause <container_name>')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                        <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker unpause &lt;container_name&gt;</code><br><br>
+                    <p class="command-desc">Resume a container</p>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('docker unpause <container_name>')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                        <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker image prune</code><br><br>
+                    <p class="command-desc">Remove all unused images</p>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard('docker image prune')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                        <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                    </svg>
+                </button>
+            </div>
+            
+  
+
+            <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker rmi $(docker images -q -f "dangling=true")</code><br><br>
+                  <p class="command-desc">Remove dangling images</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker rmi $(docker <image id>)')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker run -d &lt;image_name&gt;</code><br><br>
+                  <p class="command-desc">Run a container in the background</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker run -d <image_name>')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker exec -it &lt;container_name&gt; sh</code><br><br>
+                  <p class="command-desc">Open a shell inside a running container</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker exec -it <container_name> sh')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker run -it ubuntu bash</code><br><br>
+                  <p class="command-desc">Run a container from the Ubuntu image and open a bash shell inside it</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker run -it ubuntu bash')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker run -p &lt;host_port&gt;:&lt;container_port&gt; -d &lt;image_name&gt;</code><br><br>
+                  <p class="command-desc">Run a container and publish a container’s port(s) to the host</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker run -p <host_port>:<container_port> -d <image_name>')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker run --name &lt;container_name&gt; &lt;image_name&gt;</code><br><br>
+                  <p class="command-desc">Create and run a container from an image with a custom name</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker run --name <container_name> <image_name>')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker -d</code><br><br>
+                  <p class="command-desc">Start the Docker daemon</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker -d')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker history &lt;image_name&gt;</code><br><br>
+                  <p class="command-desc">View the history of an image, showing layers and commands used to build it</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker history <image_name>')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker save -o my_redis_image.tar redis</code><br><br>
+                  <p class="command-desc">Save an image to a tar file</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker save -o my_redis_image.tar redis')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker load -i my_redis_image.tar</code><br><br>
+                  <p class="command-desc">Load an image from a tar file</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker load -i my_redis_image.tar')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>
+          
+          <div class="command">
+              <div class="command-text">
+                  <code class="command-code">docker network ls</code><br><br>
+                  <p class="command-desc">List all Docker networks</p>
+              </div>
+              <button class="copy-btn" onclick="copyToClipboard('docker network ls')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                      <path d="M3 0h10a1 1 0 0 1 1 1v1H2V1a1 1 0 0 1 1-1zM1 3h14v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3zm3 1v10h8V4H4z"/>
+                  </svg>
+              </button>
+          </div>       
+          
+                <div class="command">
+                    <div class="command-text">
+                        <h4>Docker Multiple line command</h4><br>
+                        <code class="command-code">docker run \</code><br>
+                        <code class="command-code">  --name my-container \</code><br>
+                        <code class="command-code">  --network my-network \</code><br>
+                        <code class="command-code">  -d \</code><br>
+                        <code class="command-code">  -p 8080:80 \</code><br>
+                        <code class="command-code">  -e MYSQL_ROOT_PASSWORD=rootpassword \</code><br>
+                        <code class="command-code">  -e MYSQL_DATABASE=mydb \</code><br>
+                        <code class="command-code">  -v /my/local/data:/var/lib/mysql \</code><br>
+                        <code class="command-code">  --restart always \</code><br>
+                        <code class="command-code">  mysql:5.7</code><br><br>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <h4 class="command-desc">Explanation below here </h4>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">docker run \</code><br>
+                        <p class="command-desc">— Starts the Docker run command.</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">--name my-container \</code><br>
+                        <p class="command-desc">— Sets the container name to my-container.</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">--network my-network \</code><br>
+                        <p class="command-desc">— Connects the container to the my-network network.</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">-d \</code><br>
+                        <p class="command-desc">— Runs the container in detached mode (in the background).</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">-p 8080:80 \</code><br>
+                        <p class="command-desc">— Maps port 8080 on the host to port 80 on the container.</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">-e MYSQL_ROOT_PASSWORD=rootpassword \</code><br>
+                        <p class="command-desc">— Sets the environment variable MYSQL_ROOT_PASSWORD with the value rootpassword.</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">-e MYSQL_DATABASE=mydb \</code><br>
+                        <p class="command-desc">— Sets another environment variable MYSQL_DATABASE with the value mydb.</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">-v /my/local/data:/var/lib/mysql \</code><br>
+                        <p class="command-desc">— Mounts a volume from the host (/my/local/data) to the container (/var/lib/mysql).</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">--restart always \</code><br>
+                        <p class="command-desc">— Configures the container to always restart if it stops.</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">mysql:5.7</code><br>
+                        <p class="command-desc">— Specifies the Docker image and version to run (mysql:5.7).</p>
+                    </div>
+                </div>
+    
+
+
+
+
+          
+        </div> <!-- Closing div for commands -->
+    </div> <!-- Closing div for section-content -->
+</div> <!-- Closing div for section -->
+</body>   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- new section -->
+
+<body>
+
+        <!--Inspect Container Section -->
+        <div class="section">
+            <button class="section-header">
+                <span class="section-title">
+                    <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 17h12M6 12h12M6 7h12"></path>
+                    </svg>
+                    Inspect Container
+                </span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+        
+            <div class="section-content">
+                <div class="commands">
+                    <div class="command">
+                        <div class="command-text">
+                            <code class="command-code">docker logs -f &lt;container_name&gt;</code><br><br>
+                            <p class="command-desc">Fetch and follow the logs of a container (live logs)</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <code class="command-code">docker port &lt;container_id&gt;</code><br><br>
+                            <p class="command-desc">Show exposed ports of a container</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <code class="command-code">docker inspect &lt;container_name&gt;</code><br><br>
+                            <p class="command-desc">Inspect a running container</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <code class="command-code">docker container stats</code><br><br>
+                            <p class="command-desc">View resource usage stats</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <code class="command-code">docker system df</code><br><br>
+                            <p class="command-desc">Check Docker daemon disk space usage</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <code class="command-code">docker system prune -af</code><br><br>
+                            <p class="command-desc">Remove images, networks, containers, and volumes</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <code class="command-code">docker diff &lt;container_name&gt;</code><br><br>
+                            <p class="command-desc">Show differences with the images (modified files)</p>
+                        </div>
+                    </div>
+        
+                    <div class="command">
+                        <div class="command-text">
+                            <code class="command-code">docker top &lt;container_name&gt;</code><br><br>
+                            <p class="command-desc">List the processes running on the container</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+        
+
+
+ </body>
+
+
+                
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+    
+<!-- new section -->
+
+<div class="section">
+    <button class="section-header">
+        <span class="section-title">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 17h12M6 12h12M6 7h12"></path>
+            </svg>
+            Docker Volumes
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+
+    <div class="section-content">
+        <div class="commands">
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker volume ls</code><br><br>
+                    <p class="command-desc">List volumes</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker volume create --name &lt;volume_name&gt;</code>
+                    <p class="command-desc">Create a local volume</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker volume inspect my_volume</code><br><br>
+                    <p class="command-desc">Inspect a volume for detailed information</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker run -v &lt;volume_name&gt;:/data &lt;image-name&gt;</code><br><br>
+                    <p class="command-desc">Mount a volume on container start (e.g., <code>docker run -v /host/path:/container/path nginx</code>)</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker run -d --name my_container -v my_volume:/data nginx</code><br><br>
+                    <p class="command-desc">Use a volume when running a container</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker run -d --name my_container -v /my/local/path:/data nginx</code><br><br>
+                    <p class="command-desc">Mount a volume at a specific path</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker volume rm &lt;volume_name&gt;</code><br><br>
+                    <p class="command-desc">Destroy a volume</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker run -d --name my_container -v my_volume:/data -v /my/local/path:/config nginx</code><br><br>
+                    <p class="command-desc">Run a container with multiple volumes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+<!-- new section -->
+
+
+<div class="section">
+    <button class="section-header">
+        <span class="section-title">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 17h12M6 12h12M6 7h12"></path>
+            </svg>
+            Docker copy-commands
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+
+
+    <div class="section-content">
+        <div class="commands">
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker cp &lt;source-path-on-host&gt; &lt;container-name-or-id&gt;:&lt;destination-path-in-container&gt;</code><br><br>
+                    <p class="command-desc">Copy from Host to Container (e.g., <code>docker cp /path/on/host/file.txt my_container:/path/in/container/</code>)</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker cp &lt;container-name-or-id&gt;:&lt;source-path-in-container&gt; &lt;destination-path-on-host&gt;</code><br><br>
+                    <p class="command-desc">Copy from Container to Host (e.g., <code>docker cp my_container:/path/in/container/file.txt /path/on/host/</code>)</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker cp /path/on/host/my_directory my_container:/path/in/container/</code><br><br>
+                    <p class="command-desc">Copy a directory from Host to Container</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker cp my_container:/path/in/container/my_directory /path/on/host/</code><br><br>
+                    <p class="command-desc">Copy a directory from Container to Host</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+    
+<!-- new section -->
+
+
+<div class="section">
+    <button class="section-header">
+        <span class="section-title">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 17h12M6 12h12M6 7h12"></path>
+            </svg>
+            Docker Export Commands
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+
+    <div class="section-content">
+        <div class="commands">
+            <div class="command">
+                <div class="command-text">
+                    <p class="command-desc">The docker export command is used to export the filesystem of a container as a tarball (archive) without the image layers or history. It creates a snapshot of the container's filesystem at the current state.</p><br><br>
+                    <code class="command-code">docker export -o container_backup.tar my_container</code><br><br>
+                    <p class="command-desc">Export the filesystem of a running or stopped container into a .tar file.</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker export my_container &gt; container_backup.tar</code><br><br>
+                    <p class="command-desc">Export the filesystem and view it directly or pipe it to another command.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    
+</body>
+
+
+
+
+
+
+
+
+
+
+
+<body>
+    
+<!-- new section -->
+
+<div class="section">
+    <button class="section-header">
+        <span class="section-title">
+            <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 17h12M6 12h12M6 7h12"></path>
+            </svg>
+            Docker Network
+        </span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+
+    <div class="section-content">
+        <div class="commands">
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker network ls</code><br><br>
+                    <p class="command-desc">List All Docker Networks</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker network create &lt;network_name&gt;</code><br><br>
+                    <p class="command-desc">Create a local network</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker run -d --net &lt;network_name&gt; &lt;image-name&gt;</code><br><br>
+                    <p class="command-desc">Attach a container to a network on start</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker run -d --name my-app --network my-network nginx</code><br><br>
+                    <p class="command-desc">Create a container and attach it to a specific network</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker network connect &lt;network_name&gt; &lt;container_id&gt;</code><br><br>
+                    <p class="command-desc">Connect a running container to a network</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker network connect my-network1 my-container</code><br><br>
+                    <code class="command-code">docker network connect my-network2 my-container</code><br><br>
+                    <p class="command-desc">Attach multiple networks to a container</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <p class="command-desc">This command creates a network with a specific subnet (my-static-network) and runs a container with a static IP address (172.18.0.10) on that network.</p>
+                    <code class="command-code">docker network create --subnet=172.18.0.0/16 my-static-network</code><br><br>
+                    <code class="command-code">docker run -d --name my-app --network my-static-network --ip 172.18.0.10 nginx</code><br><br>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker network disconnect &lt;network_name&gt; &lt;container_id&gt;</code><br><br>
+                    <p class="command-desc">Disconnect a container from a network</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker network disconnect -f my-network $(docker ps -q)</code><br><br>
+                    <p class="command-desc">Disconnect all containers from a network</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker inspect -f '{{ .NetworkSettings.IPAddress }}' &lt;container_id&gt;</code><br><br>
+                    <p class="command-desc">Query a specific metadata of a running container</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker network inspect my_network</code><br><br>
+                    <p class="command-desc">Disconnect a container from a network</p>
+                </div>
+            </div>
+
+            <div class="command">
+                <div class="command-text">
+                    <code class="command-code">docker network rm my_network</code><br><br>
+                    <p class="command-desc">Remove a network</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+
+
+
+
+
+
+
+<body>
+    <!-- new section -->
+
+    <div class="section">
+        <button class="section-header">
+            <span class="section-title">
+                <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 17h12M6 12h12M6 7h12"></path>
+                </svg>
+                How to make Dockerfile
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+    
+        <div class="section-content">
+            <div class="commands">
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><strong>Information:</strong> A Dockerfile is a text document that contains a series of instructions on how to build a Docker image. Docker reads the Dockerfile to create an image with the environment and configuration you need for your applications.</p>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">FROM image</code>
+                        <br>
+                        <span class="command-desc">"base image for the build"</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>FROM ubuntu:20.04</code>)</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">LABEL (Metadata)</code>
+                        <br>
+                        <span class="command-desc">Used to add metadata to the image, like maintainer information</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>LABEL maintainer="your-email@example.com"</code>)</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">COPY path dst</code>
+                        <br>
+                        <span class="command-desc">Copies files from your host system to the image</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>COPY ./local-file /app/remote-file</code>)</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">ADD path dst</code>
+                        <br>
+                        <span class="command-desc">Similar to COPY, but it can also extract compressed files (like .tar.gz) and copy them directly into the container</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>ADD myapp.tar.gz /app</code>)</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">RUN args</code>
+                        <br>
+                        <span class="command-desc">Executes commands in the container at build time and commits the results to the image</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>RUN apt-get update && apt-get install -y curl</code>)</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">USER name</code>
+                        <br>
+                        <span class="command-desc">Set the default username</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">WORKDIR path</code>
+                        <br>
+                        <span class="command-desc">Sets the working directory inside the container for subsequent instructions like RUN, CMD, ENTRYPOINT</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>WORKDIR /app</code>)</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">CMD args</code>
+                        <br>
+                        <span class="command-desc">Provides default commands to be executed when a container starts</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>CMD ["node", "app.js"]</code>)</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">EXPOSE xxxx:xxxx</code>
+                        <br>
+                        <span class="command-desc">Informs Docker that the container will listen on the specified network ports at runtime</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>EXPOSE 8080</code>)</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <code class="command-code">VOLUME mp</code>
+                        <br>
+                        <span class="command-desc">Declares a mount point, so Docker can store data in a volume</span>
+                        <br><br>
+                        <span class="command-desc">(e.g., <code>VOLUME ["/data"]</code>)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+
+
+</body>
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+    <!-- new section -->
+
+    <div class="section">
+        <button class="section-header">
+            <span class="section-title">
+                <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 17h12M6 12h12M6 7h12"></path>
+                </svg>
+                Dockerfile Example
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+    
+        <div class="section-content">
+            <div class="commands">
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>1. Dockerfile for a Node.js Application<h4></p><br>
+                        <code class="command-code">FROM node:14</code>
+                        <br>
+                        <span class="command-desc">Use an official Node.js runtime as a parent image</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br>
+                        <span class="command-desc">Set the working directory inside the container</span>
+                        <br><br>
+                        <code class="command-code">COPY package*.json ./</code>
+                        <br>
+                        <span class="command-desc">Copy the package.json and package-lock.json files into the container</span>
+                        <br><br>
+                        <code class="command-code">RUN npm install</code>
+                        <br>
+                        <span class="command-desc">Install dependencies</span>
+                        <br><br>
+                        <code class="command-code">COPY . .</code>
+                        <br>
+                        <span class="command-desc">Copy the rest of the application code into the container</span>
+                        <br><br>
+                        <code class="command-code">ENV NODE_ENV=production</code>
+                        <br>
+                        <span class="command-desc">Set environment variables</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 3000</code>
+                        <br>
+                        <span class="command-desc">Expose the app's port</span>
+                        <br><br>
+                        <code class="command-code">CMD ["npm", "start"]</code>
+                        <br>
+                        <span class="command-desc">Start the application</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>2. Dockerfile for a Python Flask Application<h4></p><br>
+                        <code class="command-code">FROM python:3.9-slim</code>
+                        <br>
+                        <span class="command-desc">Use an official Python runtime as a parent image</span>
+                        <br><br>
+                        <code class="command-code">ENV PYTHONDONTWRITEBYTECODE=1</code>
+                        <br>
+                        <span class="command-desc">Set environment variables</span>
+                        <br><br>
+                        <code class="command-code">ENV PYTHONUNBUFFERED=1</code>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br>
+                        <span class="command-desc">Set the working directory inside the container</span>
+                        <br><br>
+                        <code class="command-code">COPY requirements.txt ./</code>
+                        <br>
+                        <span class="command-desc">Install dependencies from requirements.txt</span>
+                        <br><br>
+                        <code class="command-code">RUN pip install --no-cache-dir -r requirements.txt</code>
+                        <br><br>
+                        <code class="command-code">COPY . .</code>
+                        <br>
+                        <span class="command-desc">Copy the rest of the application code into the container</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 5000</code>
+                        <br>
+                        <span class="command-desc">Expose the port the app runs on</span>
+                        <br><br>
+                        <code class="command-code">CMD ["python", "app.py"]</code>
+                        <br>
+                        <span class="command-desc">Run the Flask app</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>3. Dockerfile for a Java Spring Boot Application<h4></p><br>
+                        <code class="command-code">FROM openjdk:11-jdk-slim</code>
+                        <br>
+                        <span class="command-desc">Use an official OpenJDK image as a parent image</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br>
+                        <span class="command-desc">Set the working directory inside the container</span>
+                        <br><br>
+                        <code class="command-code">COPY target/myapp-0.0.1-SNAPSHOT.jar app.jar</code>
+                        <br>
+                        <span class="command-desc">Add the JAR file to the container</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 8080</code>
+                        <br>
+                        <span class="command-desc">Expose the port the app runs on</span>
+                        <br><br>
+                        <code class="command-code">ENTRYPOINT ["java", "-jar", "app.jar"]</code>
+                        <br>
+                        <span class="command-desc">Run the Spring Boot app</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>4. Dockerfile for an Nginx-based Static Website<h4></p><br>
+                        <code class="command-code">FROM nginx:alpine</code>
+                        <br>
+                        <span class="command-desc">Use the official Nginx image as a base image</span>
+                        <br><br>
+                        <code class="command-code">COPY ./public /usr/share/nginx/html</code>
+                        <br>
+                        <span class="command-desc">Copy static website files to the default Nginx public directory</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 80</code>
+                        <br>
+                        <span class="command-desc">Expose port 80</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>5. Dockerfile for a .NET Core Application<h4></p><br>
+                        <code class="command-code">FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build</code>
+                        <br>
+                        <span class="command-desc">Use the .NET SDK to build the app</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br>
+                        <span class="command-desc">Set the working directory inside the container</span>
+                        <br><br>
+                        <code class="command-code">COPY *.csproj ./</code>
+                        <br>
+                        <span class="command-desc">Copy and restore dependencies</span>
+                        <br><br>
+                        <code class="command-code">RUN dotnet restore</code>
+                        <br><br>
+                        <code class="command-code">COPY . ./</code>
+                        <br>
+                        <span class="command-desc">Copy the rest of the application code</span>
+                        <br><br>
+                        <code class="command-code">RUN dotnet publish -c Release -o out</code>
+                        <br><br>
+                        <code class="command-code">FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime</code>
+                        <br>
+                        <span class="command-desc">Use the .NET Runtime image for the final image</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br>
+                        <span class="command-desc">Set the working directory inside the container</span>
+                        <br><br>
+                        <code class="command-code">COPY --from=build /app/out ./</code>
+                        <br>
+                        <span class="command-desc">Copy from the build stage</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 80</code>
+                        <br>
+                        <span class="command-desc">Expose the port the app runs on</span>
+                        <br><br>
+                        <code class="command-code">ENTRYPOINT ["dotnet", "MyApp.dll"]</code>
+                        <br>
+                        <span class="command-desc">Run the .NET Core app</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>6. Dockerfile for a PHP and Apache Application<h4></p><br>
+                        <code class="command-code">FROM php:7.4-apache</code>
+                        <br>
+                        <span class="command-desc">Use an official PHP-Apache image as a base image</span>
+                        <br><br>
+                        <code class="command-code">COPY ./src /var/www/html/</code>
+                        <br>
+                        <span class="command-desc">Copy application files into the default web root directory</span>
+                        <br><br>
+                        <code class="command-code">RUN chown -R www-data:www-data /var/www/html</code>
+                        <br>
+                        <span class="command-desc">Set file permissions</span>
+                        <br><br>
+                        <code class="command-code">RUN a2enmod rewrite</code>
+                        <br>
+                        <span class="command-desc">Enable mod_rewrite for Apache</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 80</code>
+                        <br>
+                        <span class="command-desc">Expose the web server port</span>
+                        <br><br>
+                        <code class="command-code">CMD ["apache2-foreground"]</code>
+                        <br>
+                        <span class="command-desc">Start Apache in the foreground</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>7. Dockerfile for a Ruby on Rails Application<h4></p><br>
+                        <code class="command-code">FROM ruby:2.7</code>
+                        <br>
+                        <span class="command-desc">Use the official Ruby image</span>
+                        <br><br>
+                        <code class="command-code">RUN apt-get update -qq && apt-get install -y nodejs postgresql-client</code>
+                        <br>
+                        <span class="command-desc">Install dependencies</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br>
+                        <span class="command-desc">Set the working directory inside the container</span>
+                        <br><br>
+                        <code class="command-code">COPY Gemfile Gemfile.lock ./</code>
+                        <br>
+                        <span class="command-desc">Copy the Gemfile and Gemfile.lock and install gems</span>
+                        <br><br>
+                        <code class="command-code">RUN bundle install</code>
+                        <br><br>
+                        <code class="command-code">COPY . .</code>
+                        <br>
+                        <span class="command-desc">Copy the rest of the application code into the container</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 3000</code>
+                        <br>
+                        <span class="command-desc">Expose the Rails server port</span>
+                        <br><br>
+                        <code class="command-code">CMD ["rails", "server", "-b", "0.0.0.0"]</code>
+                        <br>
+                        <span class="command-desc">Start the Rails server</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>8. Dockerfile for a React.js Frontend Application</h4></p><br>
+                        <code class="command-code">FROM node:16 AS build</code>
+                        <br>
+                        <span class="command-desc">Use Node.js for building the React app</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br>
+                        <span class="command-desc">Set the working directory inside the container</span>
+                        <br><br>
+                        <code class="command-code">COPY package*.json ./</code>
+                        <br>
+                        <span class="command-desc">Install dependencies</span>
+                        <br><br>
+                        <code class="command-code">RUN npm install</code>
+                        <br><br>
+                        <code class="command-code">COPY . .</code>
+                        <br>
+                        <span class="command-desc">Copy the rest of the application code</span>
+                        <br><br>
+                        <code class="command-code">RUN npm run build</code>
+                        <br>
+                        <span class="command-desc">Build the React app for production</span>
+                        <br><br>
+                        <code class="command-code">FROM nginx:alpine</code>
+                        <br>
+                        <span class="command-desc">Use Nginx to serve the built files</span>
+                        <br><br>
+                        <code class="command-code">COPY --from=build /app/build /usr/share/nginx/html</code>
+                        <br><br>
+                        <code class="command-code">EXPOSE 80</code>
+                        <br>
+                        <span class="command-desc">Expose port 80</span>
+                        <br><br>
+                        <code class="command-code">CMD ["nginx", "-g", "daemon off;"]</code>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+                 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+    <!-- new section -->
+
+    <div class="section">
+        <button class="section-header">
+            <span class="section-title">
+                <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 17h12M6 12h12M6 7h12"></path>
+                </svg>
+                Advanced Examples of Dockerfiles
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+    
+        <div class="section-content">
+            <div class="commands">
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>1. Dockerfile for Production-Ready Node.js Application</h4></p><br>
+                        <span class="command-desc">This Dockerfile example optimizes the build for a production Node.js application using multi-stage builds and non-root users.</span>
+                        <br><br>
+                        <code class="command-code">FROM node:16 AS builder</code>
+                        <br><span class="command-desc">* Stage 1: Build the app</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br><span class="command-desc">* Set the working directory</span>
+                        <br><br>
+                        <code class="command-code">COPY package*.json ./</code>
+                        <br><span class="command-desc">* Install dependencies first to leverage Docker's caching mechanism</span>
+                        <br><br>
+                        <code class="command-code">RUN npm install --production</code>
+                        <br><br>
+                        <code class="command-code">COPY . .</code>
+                        <br><span class="command-desc">* Copy the rest of the application code</span>
+                        <br><br>
+                        <code class="command-code">RUN npm run build</code>
+                        <br><span class="command-desc">* Build the app for production</span>
+                        <br><br>
+                        <code class="command-code">FROM node:16-alpine</code>
+                        <br><span class="command-desc">* Stage 2: Create a minimal production image</span>
+                        <br><br>
+                        <code class="command-code">RUN addgroup -S appgroup && adduser -S appuser -G appgroup</code>
+                        <br><span class="command-desc">* Set a non-root user for better security</span>
+                        <br><br>
+                        <code class="command-code">USER appuser</code>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br><span class="command-desc">* Set the working directory</span>
+                        <br><br>
+                        <code class="command-code">COPY --from=builder /app/build /app</code>
+                        <br><span class="command-desc">* Copy only the necessary files from the builder stage</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 3000</code>
+                        <br><span class="command-desc">* Expose the app port</span>
+                        <br><br>
+                        <code class="command-code">ENV NODE_ENV=production</code>
+                        <br><span class="command-desc">* Set environment variables</span>
+                        <br><br>
+                        <code class="command-code">CMD ["npm", "start"]</code>
+                        <br><span class="command-desc">* Run the application</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>2. Dockerfile for a Microservice (Python Flask + Gunicorn)</h4></p><br>
+                        <span class="command-desc">This example demonstrates a Dockerfile for a Python Flask microservice that uses Gunicorn for production readiness.</span>
+                        <br><br>
+                        <code class="command-code">FROM python:3.9-slim AS base</code>
+                        <br><span class="command-desc">* Stage 1: Base image</span>
+                        <br><br>
+                        <code class="command-code">ENV PYTHONDONTWRITEBYTECODE=1</code>
+                        <br><code class="command-code">ENV PYTHONUNBUFFERED=1</code>
+                        <br><span class="command-desc">* Set environment variables to disable buffering</span>
+                        <br><br>
+                        <code class="command-code">RUN apt-get update && apt-get install -y \</code>
+                        <br><code class="command-code">    build-essential \</code>
+                        <br><code class="command-code">    libpq-dev \</code>
+                        <br><code class="command-code">    --no-install-recommends && \</code>
+                        <br><code class="command-code">    rm -rf /var/lib/apt/lists/*</code>
+                        <br><span class="command-desc">* Install dependencies</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br><span class="command-desc">* Set a working directory</span>
+                        <br><br>
+                        <code class="command-code">COPY requirements.txt ./</code>
+                        <br><span class="command-desc">* Install Python dependencies</span>
+                        <br><br>
+                        <code class="command-code">RUN pip install --no-cache-dir -r requirements.txt</code>
+                        <br><br>
+                        <code class="command-code">FROM base AS final</code>
+                        <br><span class="command-desc">* Stage 2: Application code</span>
+                        <br><br>
+                        <code class="command-code">COPY . .</code>
+                        <br><span class="command-desc">* Copy the application code into the container</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 5000</code>
+                        <br><span class="command-desc">* Expose the app port</span>
+                        <br><br>
+                        <code class="command-code">CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]</code>
+                        <br><span class="command-desc">* Command to run the app</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>3. Dockerfile for a Java Spring Boot Microservice with Multi-Stage Build</h4></p><br>
+                        <span class="command-desc">This example shows a production-grade Spring Boot Dockerfile using multi-stage builds to reduce the final image size.</span>
+                        <br><br>
+                        <code class="command-code">FROM maven:3.8.4-openjdk-11 AS build</code>
+                        <br><span class="command-desc">* Stage 1: Build the app</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br><span class="command-desc">* Set working directory</span>
+                        <br><br>
+                        <code class="command-code">COPY pom.xml .</code>
+                        <br><span class="command-desc">* Copy pom.xml and install dependencies</span>
+                        <br><br>
+                        <code class="command-code">RUN mvn dependency:go-offline</code>
+                        <br><br>
+                        <code class="command-code">COPY src ./src</code>
+                        <br><span class="command-desc">* Copy the source code and build the app</span>
+                        <br><br>
+                        <code class="command-code">RUN mvn package -DskipTests</code>
+                        <br><br>
+                        <code class="command-code">FROM openjdk:11-jre-slim</code>
+                        <br><span class="command-desc">* Stage 2: Create a minimal runtime image</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br><span class="command-desc">* Set working directory</span>
+                        <br><br>
+                        <code class="command-code">COPY --from=build /app/target/myapp.jar ./myapp.jar</code>
+                        <br><span class="command-desc">* Copy only the JAR file from the build stage</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 8080</code>
+                        <br><span class="command-desc">* Expose the application port</span>
+                        <br><br>
+                        <code class="command-code">CMD ["java", "-jar", "myapp.jar"]</code>
+                        <br><span class="command-desc">* Run the JAR file</span>
+                    </div>
+                </div>
+    
+                <div class="command">
+                    <div class="command-text">
+                        <p class="command-desc"><h4>4. Dockerfile for a CI/CD Pipeline (Node.js + Alpine + Docker)</h4></p><br>
+                        <span class="command-desc">This Dockerfile example is designed for building Node.js applications within a CI/CD environment. It integrates Docker into the build process using the Docker-in-Docker (DinD) technique.</span>
+                        <br><br>
+                        <code class="command-code">FROM node:16-alpine AS builder</code>
+                        <br><span class="command-desc">* Stage 1: Build the Node.js app</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br><span class="command-desc">* Install dependencies</span>
+                        <br><br>
+                        <code class="command-code">COPY package*.json ./</code>
+                        <br><code class="command-code">RUN npm install --production</code>
+                        <br><br>
+                        <code class="command-code">COPY . .</code>
+                        <br><span class="command-desc">* Copy the rest of the application code</span>
+                        <br><br>
+                        <code class="command-code">RUN npm run build</code>
+                        <br><br>
+                        <code class="command-code">FROM docker:20.10.7-dind</code>
+                        <br><span class="command-desc">* Stage 2: DinD (Docker in Docker) for CI/CD</span>
+                        <br><br>
+                        <code class="command-code">RUN apk add --no-cache nodejs npm</code>
+                        <br><span class="command-desc">* Install Docker client and Node.js runtime</span>
+                        <br><br>
+                        <code class="command-code">WORKDIR /app</code>
+                        <br><span class="command-desc">* Set working directory</span>
+                        <br><br>
+                        <code class="command-code">COPY --from=builder /app /app</code>
+                        <br><span class="command-desc">* Copy the built files from the previous stage</span>
+                        <br><br>
+                        <code class="command-code">EXPOSE 2375</code>
+                        <br><span class="command-desc">* Expose the Docker daemon for CI/CD tools like Jenkins or GitLab CI</span>
+                        <br><br>
+                        <code class="command-code">CMD ["dockerd-entrypoint.sh"]</code>
+                        <br><span class="command-desc">* Start Docker daemon and app</span>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+        <!-- More sections following the same pattern -->
+    </div>
+
+    <script>
+        // Toggle sections
+        document.querySelectorAll('.section-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const section = header.parentElement;
+                section.classList.toggle('active');
+            });
+        });
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Optional: Add a visual feedback when copied
+                const btn = event.currentTarget;
+                btn.style.color = '#3B82F6';
+                setTimeout(() => {
+                    btn.style.color = '#9CA3AF';
+                }, 500);
+            });
+        }
+    </script>
+</body>
+</html>
