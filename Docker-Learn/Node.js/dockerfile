@@ -1,0 +1,18 @@
+FROM node:18
+
+WORKDIR /app
+
+# Copy package.json and package-lock.json before copying other files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of your app
+COPY . .
+
+# Expose port and run
+EXPOSE 3000
+
+CMD ["node", "index.js"]
+
